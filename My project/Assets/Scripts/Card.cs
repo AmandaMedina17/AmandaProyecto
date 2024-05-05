@@ -5,6 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Card", menuName = "Card")]
 public class Card : ScriptableObject
 {
+    public int id;
     public new string name;
     public string faction;
     public string cardDescription;
@@ -21,10 +22,7 @@ public class Card : ScriptableObject
         Debug.Log(name + ": " + cardDescription + "El poder de la carta: " + power);
     }
 
-
-
-
-   /* public Card(int Id, string CardName, string Faction, int InitialPower, string CardDescription, Sprite SpriteImage, string Color, int Power, string Zone, string CardType)
+/* public Card(int Id, string CardName, string Faction, int InitialPower, string CardDescription, Sprite SpriteImage, string Color, int Power, string Zone, string CardType)
     {
         id = Id;
         cardName = CardName;

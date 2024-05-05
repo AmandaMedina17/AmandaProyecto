@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dda1a26944933df4c8ea5e4b60c47e76, type: 3}
   m_Name: Atenas
   m_EditorClassIdentifier: 
+  id: 6
   name: Atenas
   faction: Dioses Griegos
   cardDescription: Calcula el promedio de poder entre todas las cartas del campo

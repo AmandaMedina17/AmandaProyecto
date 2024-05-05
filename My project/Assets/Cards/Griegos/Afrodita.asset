@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dda1a26944933df4c8ea5e4b60c47e76, type: 3}
   m_Name: Afrodita
   m_EditorClassIdentifier: 
+  id: 4
   name: Afrodita
   faction: Dioses Griegos
   cardDescription: Roba una carta

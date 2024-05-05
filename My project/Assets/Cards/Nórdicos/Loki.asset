@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dda1a26944933df4c8ea5e4b60c47e76, type: 3}
   m_Name: Loki
   m_EditorClassIdentifier: 
+  id: 2
   name: Loki
   faction: "Dioses N\xF3rdicos"
   cardDescription: "Elimina la carta con m\xE1s poder del campo (propio o del rival)"

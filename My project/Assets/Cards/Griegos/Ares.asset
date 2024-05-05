@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dda1a26944933df4c8ea5e4b60c47e76, type: 3}
   m_Name: Ares
   m_EditorClassIdentifier: 
+  id: 7
   name: Ares
   faction: Dioses Griegos
   cardDescription: Elimina la carta con menos poder del rival

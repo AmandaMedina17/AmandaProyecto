@@ -8,6 +8,8 @@ public class TeletransportationCard : MonoBehaviour
     public static int player2Points;
     public static bool player1PlayedACard;
     public static bool player2PlayedACard;
+   
+
 
     //gameObject.transform.localScale = new Vector3(1, 1, 1);
 
@@ -28,7 +30,7 @@ public class TeletransportationCard : MonoBehaviour
                 GameObject.Find("ZoneMelee").GetComponent<ScriptZone>().Melee.Add(this.gameObject);
                 GameObject.Find("deck").GetComponent<Deck>().CardsInHand.Remove(this.gameObject);
                 player1PlayedACard = true;
-
+                player1Points = player1Points + this.gameObject.GetComponent<DisplayCard>().card.power;
             }
 
             else if (this.gameObject.GetComponent<DisplayCard>().card.zone == "S" && this.gameObject.GetComponent<DisplayCard>().card.faction == "Dioses Griegos")
@@ -37,6 +39,7 @@ public class TeletransportationCard : MonoBehaviour
                 GameObject.Find("ZoneSiege").GetComponent<ScriptZone>().Siege.Add(this.gameObject);
                 GameObject.Find("deck").GetComponent<Deck>().CardsInHand.Remove(this.gameObject);
                 player1PlayedACard = true;
+                player1Points = player1Points + this.gameObject.GetComponent<DisplayCard>().card.power;
             }
 
            else if (this.gameObject.GetComponent<DisplayCard>().card.zone == "R" && this.gameObject.GetComponent<DisplayCard>().card.faction == "Dioses Griegos")
@@ -45,6 +48,7 @@ public class TeletransportationCard : MonoBehaviour
                 GameObject.Find("ZoneRange").GetComponent<ScriptZone>().Range.Add(this.gameObject);
                 GameObject.Find("deck").GetComponent<Deck>().CardsInHand.Remove(this.gameObject);
                 player1PlayedACard = true;
+                player1Points = player1Points + this.gameObject.GetComponent<DisplayCard>().card.power;
             }
 
             else if (this.gameObject.GetComponent<DisplayCard>().card.zone == "Cl" && this.gameObject.GetComponent<DisplayCard>().card.faction == "Dioses Griegos")
@@ -53,6 +57,8 @@ public class TeletransportationCard : MonoBehaviour
                 GameObject.Find("ZoneClimate").GetComponent<ScriptZone>().RangeEnemy.Add(this.gameObject);
                 GameObject.Find("deck").GetComponent<Deck>().CardsInHand.Remove(this.gameObject);
                 player1PlayedACard = true;
+                player1Points = player1Points + this.gameObject.GetComponent<DisplayCard>().card.power;
+
                 /*if(TurnSystem.player1Turn == true)
                 {
                     player1PlayedACard = true;
@@ -69,6 +75,7 @@ public class TeletransportationCard : MonoBehaviour
                 GameObject.Find("ZoneIncreaseMelee").GetComponent<ScriptZone>().RangeEnemy.Add(this.gameObject);
                 GameObject.Find("deck").GetComponent<Deck>().CardsInHand.Remove(this.gameObject);
                 player1PlayedACard = true;
+                player1Points = player1Points + this.gameObject.GetComponent<DisplayCard>().card.power;
             }
 
             else if (this.gameObject.GetComponent<DisplayCard>().card.zone == "AuR" && this.gameObject.GetComponent<DisplayCard>().card.faction == "Dioses Griegos")
@@ -77,6 +84,7 @@ public class TeletransportationCard : MonoBehaviour
                 GameObject.Find("ZoneIncreaseRange").GetComponent<ScriptZone>().RangeEnemy.Add(this.gameObject);
                 GameObject.Find("deck").GetComponent<Deck>().CardsInHand.Remove(this.gameObject);
                 player1PlayedACard = true;
+                player1Points = player1Points + this.gameObject.GetComponent<DisplayCard>().card.power;
             }
 
             else if (this.gameObject.GetComponent<DisplayCard>().card.zone == "AuS" && this.gameObject.GetComponent<DisplayCard>().card.faction == "Dioses Griegos")
@@ -85,6 +93,7 @@ public class TeletransportationCard : MonoBehaviour
                 GameObject.Find("ZoneIncreaseSiege").GetComponent<ScriptZone>().RangeEnemy.Add(this.gameObject);
                 GameObject.Find("deck").GetComponent<Deck>().CardsInHand.Remove(this.gameObject);
                 player1PlayedACard = true;
+                player1Points = player1Points + this.gameObject.GetComponent<DisplayCard>().card.power;
             }
         }
 
@@ -97,6 +106,7 @@ public class TeletransportationCard : MonoBehaviour
                 GameObject.Find("ZoneMeleeEnemy").GetComponent<ScriptZone>().MeleeEnemy.Add(this.gameObject);
                 GameObject.Find("enemyDeck").GetComponent<Deck>().CardsInHand.Remove(this.gameObject);
                 player2PlayedACard = true;
+                player2Points = player2Points + this.gameObject.GetComponent<DisplayCard>().card.power;
             }
 
             else if (this.gameObject.GetComponent<DisplayCard>().card.zone == "S" && this.gameObject.GetComponent<DisplayCard>().card.faction == "Dioses Nórdicos")
@@ -105,6 +115,7 @@ public class TeletransportationCard : MonoBehaviour
                 GameObject.Find("ZoneSiegeEnemy").GetComponent<ScriptZone>().SiegeEnemy.Add(this.gameObject);
                 GameObject.Find("enemyDeck").GetComponent<Deck>().CardsInHand.Remove(this.gameObject);
                 player2PlayedACard = true;
+                player2Points = player2Points + this.gameObject.GetComponent<DisplayCard>().card.power;
             }
 
             else if (this.gameObject.GetComponent<DisplayCard>().card.zone == "R" && this.gameObject.GetComponent<DisplayCard>().card.faction == "Dioses Nórdicos")
@@ -113,6 +124,7 @@ public class TeletransportationCard : MonoBehaviour
                 GameObject.Find("ZoneRangeEnemy").GetComponent<ScriptZone>().RangeEnemy.Add(this.gameObject);
                 GameObject.Find("enemyDeck").GetComponent<Deck>().CardsInHand.Remove(this.gameObject);
                 player2PlayedACard = true;
+                player2Points = player2Points + this.gameObject.GetComponent<DisplayCard>().card.power;
             }
 
             else if (this.gameObject.GetComponent<DisplayCard>().card.zone == "Cl" && this.gameObject.GetComponent<DisplayCard>().card.faction == "Dioses Nórdicos")
@@ -121,6 +133,8 @@ public class TeletransportationCard : MonoBehaviour
                 GameObject.Find("ZoneClimate").GetComponent<ScriptZone>().RangeEnemy.Add(this.gameObject);
                 GameObject.Find("deck").GetComponent<Deck>().CardsInHand.Remove(this.gameObject);
                 player2PlayedACard = true;
+                player2Points = player2Points + this.gameObject.GetComponent<DisplayCard>().card.power;
+
                 /*if(TurnSystem.player1Turn == true)
                 {
                     player1PlayedACard = true;
@@ -137,6 +151,7 @@ public class TeletransportationCard : MonoBehaviour
                 GameObject.Find("ZoneIncreaseMeleeEnemy").GetComponent<ScriptZone>().RangeEnemy.Add(this.gameObject);
                 GameObject.Find("enemyDeck").GetComponent<Deck>().CardsInHand.Remove(this.gameObject);
                 player2PlayedACard = true;
+                player2Points = player2Points + this.gameObject.GetComponent<DisplayCard>().card.power;
             }
 
             else if (this.gameObject.GetComponent<DisplayCard>().card.zone == "AuR" && this.gameObject.GetComponent<DisplayCard>().card.faction == "Dioses Nórdicos")
@@ -145,6 +160,7 @@ public class TeletransportationCard : MonoBehaviour
                 GameObject.Find("ZoneIncreaseRangeEnemy").GetComponent<ScriptZone>().RangeEnemy.Add(this.gameObject);
                 GameObject.Find("enemyDeck").GetComponent<Deck>().CardsInHand.Remove(this.gameObject);
                 player2PlayedACard = true;
+                player2Points = player2Points + this.gameObject.GetComponent<DisplayCard>().card.power;
             }
 
             else if (this.gameObject.GetComponent<DisplayCard>().card.zone == "AuS" && this.gameObject.GetComponent<DisplayCard>().card.faction == "Dioses Nórdicos")
@@ -153,9 +169,15 @@ public class TeletransportationCard : MonoBehaviour
                 GameObject.Find("ZoneIncreaseSiegeEnemy").GetComponent<ScriptZone>().RangeEnemy.Add(this.gameObject);
                 GameObject.Find("enemyDeck").GetComponent<Deck>().CardsInHand.Remove(this.gameObject);
                 player2PlayedACard = true;
+                player2Points = player2Points + this.gameObject.GetComponent<DisplayCard>().card.power;
             }
 
         }
+    }
+
+    void Update()
+    {
+        
     }
 
 }
