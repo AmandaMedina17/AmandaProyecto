@@ -10,15 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dda1a26944933df4c8ea5e4b60c47e76, type: 3}
-  m_Name: Clima
+  m_Name: Aumento 2
   m_EditorClassIdentifier: 
-  name: Clima
+  name: Aumento 2
   faction: Dioses Griegos
-  cardDescription: "No permite colocar cartas en la fila Siege mientras est\xE1 activa"
-  spriteImage: {fileID: 21300000, guid: 8c4b3384385761342803389dab740d2b, type: 3}
+  cardDescription: "Bonificaci\xF3n de 2 puntos al ataque de las unidades de la fila
+    Range"
+  spriteImage: {fileID: 21300000, guid: 036b608f3d3b6104c94057a1efeaeda4, type: 3}
   color: White
   power: 0
-  zone: Cl
+  zone: AuR
   cardType: Special
   increase: 0
   climate: 0

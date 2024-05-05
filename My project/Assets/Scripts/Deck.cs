@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class Deck : MonoBehaviour
 {
-    public static List<GameObject> cardList = new List<GameObject>();
-    public static List<GameObject> CardsInHand = new List<GameObject>();
-    public GameObject Card1;
+    public List<GameObject> cardList;
+    public List<GameObject> CardsInHand;
+    
+    /*public GameObject Card1;
     public GameObject Card2;
     public GameObject Card3;
     public GameObject Card4;
@@ -32,7 +33,7 @@ public class Deck : MonoBehaviour
     public GameObject Card24;
     public GameObject Card25;
     public GameObject Card26;
-    public GameObject Card27;
+    public GameObject Card27;*/
     public GameObject Hand;
 
 
@@ -44,8 +45,13 @@ public class Deck : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
     public void OnClick()
+    {
+        DrawCard();
+    }
+
+    // Update is called once per frame
+    public void DrawCard()
     {
         int randomIndex = Random.Range(0, cardList.Count);
         GameObject drawCard = Instantiate(cardList[randomIndex], new Vector3(0, 0, 0), Quaternion.identity);
@@ -54,7 +60,7 @@ public class Deck : MonoBehaviour
         cardList.RemoveAt(randomIndex);
     }
 
-    void Awake(){
+   /* void Awake(){
         cardList.Add(Card1);
         cardList.Add(Card2);
         cardList.Add(Card3);
@@ -82,5 +88,5 @@ public class Deck : MonoBehaviour
         cardList.Add(Card25);
         cardList.Add(Card26);
         cardList.Add(Card27);
-    }
+    }*/
 }

@@ -14,8 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: "Se\xF1uelo"
   faction: "Dioses N\xF3rdicos"
-  cardDescription: 
-  spriteImage: {fileID: 0}
+  cardDescription: Coloca esta carta en el lugar de una carta del campo para regresar
+    esta a la mano
+  spriteImage: {fileID: 21300000, guid: e8f303fee463432408d65213ce5bcd90, type: 3}
   color: White
   power: 0
   zone: 

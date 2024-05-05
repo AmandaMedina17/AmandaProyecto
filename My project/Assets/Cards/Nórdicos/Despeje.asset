@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Despeje
   faction: "Dioses N\xF3rdicos"
-  cardDescription: 
-  spriteImage: {fileID: 0}
+  cardDescription: Despeja el clima eliminando una carta de tipo clima
+  spriteImage: {fileID: 21300000, guid: bba9a7540a1c8724a927220d2c30f9b7, type: 3}
   color: White
   power: 0
   zone: Cl
