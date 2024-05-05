@@ -48,6 +48,15 @@ public class TurnSystem : MonoBehaviour
             TeletransportationCard.player2PlayedACard = false;
         }
 
+        if(GameManager.winner == 1)
+        {
+            player1Turn = true;
+        }
+        else if(GameManager.winner == 2)
+        {
+            player1Turn = false;
+        }
+
     }
 
     public void EndPlayer1Turn()

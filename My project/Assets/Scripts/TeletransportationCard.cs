@@ -54,7 +54,7 @@ public class TeletransportationCard : MonoBehaviour
             else if (this.gameObject.GetComponent<DisplayCard>().card.zone == "Cl" && this.gameObject.GetComponent<DisplayCard>().card.faction == "Dioses Griegos")
             {
                 this.gameObject.transform.SetParent(GameObject.Find("ZoneClimate").transform, false);
-                GameObject.Find("ZoneClimate").GetComponent<ScriptZone>().RangeEnemy.Add(this.gameObject);
+                GameObject.Find("ZoneClimate").GetComponent<ScriptZone>().Climate.Add(this.gameObject);
                 GameObject.Find("deck").GetComponent<Deck>().CardsInHand.Remove(this.gameObject);
                 player1PlayedACard = true;
                 player1Points = player1Points + this.gameObject.GetComponent<DisplayCard>().card.power;
@@ -72,7 +72,7 @@ public class TeletransportationCard : MonoBehaviour
             else if (this.gameObject.GetComponent<DisplayCard>().card.zone == "AuM" && this.gameObject.GetComponent<DisplayCard>().card.faction == "Dioses Griegos")
             {
                 this.gameObject.transform.SetParent(GameObject.Find("ZoneIncreaseMelee").transform, false);
-                GameObject.Find("ZoneIncreaseMelee").GetComponent<ScriptZone>().RangeEnemy.Add(this.gameObject);
+                GameObject.Find("ZoneIncreaseMelee").GetComponent<ScriptZone>().IncreaseMelee.Add(this.gameObject);
                 GameObject.Find("deck").GetComponent<Deck>().CardsInHand.Remove(this.gameObject);
                 player1PlayedACard = true;
                 player1Points = player1Points + this.gameObject.GetComponent<DisplayCard>().card.power;
@@ -81,7 +81,7 @@ public class TeletransportationCard : MonoBehaviour
             else if (this.gameObject.GetComponent<DisplayCard>().card.zone == "AuR" && this.gameObject.GetComponent<DisplayCard>().card.faction == "Dioses Griegos")
             {   
                 this.gameObject.transform.SetParent(GameObject.Find("ZoneIncreaseRange").transform, false);
-                GameObject.Find("ZoneIncreaseRange").GetComponent<ScriptZone>().RangeEnemy.Add(this.gameObject);
+                GameObject.Find("ZoneIncreaseRange").GetComponent<ScriptZone>().IncreaseRange.Add(this.gameObject);
                 GameObject.Find("deck").GetComponent<Deck>().CardsInHand.Remove(this.gameObject);
                 player1PlayedACard = true;
                 player1Points = player1Points + this.gameObject.GetComponent<DisplayCard>().card.power;
@@ -90,7 +90,7 @@ public class TeletransportationCard : MonoBehaviour
             else if (this.gameObject.GetComponent<DisplayCard>().card.zone == "AuS" && this.gameObject.GetComponent<DisplayCard>().card.faction == "Dioses Griegos")
             {
                 this.gameObject.transform.SetParent(GameObject.Find("ZoneIncreaseSiege").transform, false);
-                GameObject.Find("ZoneIncreaseSiege").GetComponent<ScriptZone>().RangeEnemy.Add(this.gameObject);
+                GameObject.Find("ZoneIncreaseSiege").GetComponent<ScriptZone>().IncreaseSiege.Add(this.gameObject);
                 GameObject.Find("deck").GetComponent<Deck>().CardsInHand.Remove(this.gameObject);
                 player1PlayedACard = true;
                 player1Points = player1Points + this.gameObject.GetComponent<DisplayCard>().card.power;
@@ -130,7 +130,7 @@ public class TeletransportationCard : MonoBehaviour
             else if (this.gameObject.GetComponent<DisplayCard>().card.zone == "Cl" && this.gameObject.GetComponent<DisplayCard>().card.faction == "Dioses Nórdicos")
             {
                 this.gameObject.transform.SetParent(GameObject.Find("ZoneClimate").transform, false);
-                GameObject.Find("ZoneClimate").GetComponent<ScriptZone>().RangeEnemy.Add(this.gameObject);
+                GameObject.Find("ZoneClimate").GetComponent<ScriptZone>().Climate.Add(this.gameObject);
                 GameObject.Find("deck").GetComponent<Deck>().CardsInHand.Remove(this.gameObject);
                 player2PlayedACard = true;
                 player2Points = player2Points + this.gameObject.GetComponent<DisplayCard>().card.power;
@@ -148,7 +148,7 @@ public class TeletransportationCard : MonoBehaviour
             else if (this.gameObject.GetComponent<DisplayCard>().card.zone == "AuM" && this.gameObject.GetComponent<DisplayCard>().card.faction == "Dioses Nórdicos")
             {
                 this.gameObject.transform.SetParent(GameObject.Find("ZoneIncreaseMeleeEnemy").transform, false);
-                GameObject.Find("ZoneIncreaseMeleeEnemy").GetComponent<ScriptZone>().RangeEnemy.Add(this.gameObject);
+                GameObject.Find("ZoneIncreaseMeleeEnemy").GetComponent<ScriptZone>().IncreaseMeleeEnemy.Add(this.gameObject);
                 GameObject.Find("enemyDeck").GetComponent<Deck>().CardsInHand.Remove(this.gameObject);
                 player2PlayedACard = true;
                 player2Points = player2Points + this.gameObject.GetComponent<DisplayCard>().card.power;
@@ -157,7 +157,7 @@ public class TeletransportationCard : MonoBehaviour
             else if (this.gameObject.GetComponent<DisplayCard>().card.zone == "AuR" && this.gameObject.GetComponent<DisplayCard>().card.faction == "Dioses Nórdicos")
             {   
                 this.gameObject.transform.SetParent(GameObject.Find("ZoneIncreaseRangeEnemy").transform, false);
-                GameObject.Find("ZoneIncreaseRangeEnemy").GetComponent<ScriptZone>().RangeEnemy.Add(this.gameObject);
+                GameObject.Find("ZoneIncreaseRangeEnemy").GetComponent<ScriptZone>().IncreaseRangeEnemy.Add(this.gameObject);
                 GameObject.Find("enemyDeck").GetComponent<Deck>().CardsInHand.Remove(this.gameObject);
                 player2PlayedACard = true;
                 player2Points = player2Points + this.gameObject.GetComponent<DisplayCard>().card.power;
@@ -166,7 +166,7 @@ public class TeletransportationCard : MonoBehaviour
             else if (this.gameObject.GetComponent<DisplayCard>().card.zone == "AuS" && this.gameObject.GetComponent<DisplayCard>().card.faction == "Dioses Nórdicos")
             {
                 this.gameObject.transform.SetParent(GameObject.Find("ZoneIncreaseSiegeEnemy").transform, false);
-                GameObject.Find("ZoneIncreaseSiegeEnemy").GetComponent<ScriptZone>().RangeEnemy.Add(this.gameObject);
+                GameObject.Find("ZoneIncreaseSiegeEnemy").GetComponent<ScriptZone>().IncreaseSiegeEnemy.Add(this.gameObject);
                 GameObject.Find("enemyDeck").GetComponent<Deck>().CardsInHand.Remove(this.gameObject);
                 player2PlayedACard = true;
                 player2Points = player2Points + this.gameObject.GetComponent<DisplayCard>().card.power;

@@ -8,6 +8,8 @@ public class Points : MonoBehaviour
 {
     public TMP_Text pointsText1;
     public TMP_Text pointsText2;
+   
+
 
     // Start is called before the first frame update
     void Start()
