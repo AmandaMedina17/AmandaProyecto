@@ -18,8 +18,8 @@ MonoBehaviour:
   cardDescription: Elimina la carta con menos poder del rival
   spriteImage: {fileID: 21300000, guid: 87ee28c78180602479bc6630e2004b07, type: 3}
   color: Silver
-  power: 4
+  power: 3
+  initialPower: 3
   zone: M
   cardType: Silver
-  increase: 0
-  climate: 0
+  point: 1

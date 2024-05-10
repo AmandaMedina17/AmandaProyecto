@@ -13,6 +13,7 @@ public class DisplayCard : MonoBehaviour
     public Image Image;
     public TMP_Text Power;
     public TextMeshProUGUI nameText;
+    
   
     public TMP_Text Zone;
     

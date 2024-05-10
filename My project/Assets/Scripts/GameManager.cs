@@ -25,11 +25,14 @@ public class GameManager : MonoBehaviour
     private ScriptZone increaseMeleeEnemy;
     private ScriptZone increaseRangeEnemy;
     private ScriptZone increaseSiegeEnemy;
+   
+
 
     public static int winner;
 
     private void Start()
     {
+        
         roundNumber = 1;
         enemyDeck = GameObject.Find("enemyDeck").GetComponent<Deck>();
         playerDeck = GameObject.Find("deck").GetComponent<Deck>();
@@ -48,6 +51,7 @@ public class GameManager : MonoBehaviour
         increaseRangeEnemy = GameObject.Find("ZoneIncreaseRangeEnemy").GetComponent<ScriptZone>();
         increaseSiegeEnemy = GameObject.Find("ZoneIncreaseSiegeEnemy").GetComponent<ScriptZone>();
        
+       inicializarPower();
     }
 
     private void Update()
@@ -133,18 +137,37 @@ public class GameManager : MonoBehaviour
 
     public void Judge()
     {
-        if(TeletransportationCard.player1Points < TeletransportationCard.player2Points)
+        if(Points.totalPowerPlayer1 < Points.totalPowerPlayer2)
         {
             winner = 2;
         }
-        else if(TeletransportationCard.player1Points > TeletransportationCard.player2Points)
+        else if(Points.totalPowerPlayer1 > Points.totalPowerPlayer2)
         {
             winner = 1;
         }
-        else if(TeletransportationCard.player1Points == TeletransportationCard.player2Points)
+        else if(Points.totalPowerPlayer1 == Points.totalPowerPlayer2)
         {
             winner = 0;
         }
        
+    }
+
+    private void inicializarPower()
+    {
+
+
+        playerDeck = GameObject.Find("deck").GetComponent<Deck>();
+        enemyDeck = GameObject.Find("enemyDeck").GetComponent<Deck>();
+
+        for (int i = 0; i < playerDeck.cardList.Count; i++)
+        {
+            playerDeck.cardList[i].GetComponent<DisplayCard>().card.power = playerDeck.cardList[i].GetComponent<DisplayCard>().card.initialPower;
+        }
+
+        for (int i = 0; i < enemyDeck.cardList.Count; i++)
+        {
+            enemyDeck.cardList[i].GetComponent<DisplayCard>().card.power = enemyDeck.cardList[i].GetComponent<DisplayCard>().card.initialPower;
+        }
+
     }
 }

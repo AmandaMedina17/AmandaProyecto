@@ -15,11 +15,11 @@ MonoBehaviour:
   id: 3
   name: Hera
   faction: Dioses Griegos
-  cardDescription: Coloca un aumento en una fila propia
+  cardDescription: Coloca un aumento de un punto en la fila Range
   spriteImage: {fileID: 21300000, guid: 3b7ec9996eadad94782179837bf64d51, type: 3}
   color: Silver
-  power: 4
+  power: 3
+  initialPower: 3
   zone: R
   cardType: Silver
-  increase: 0
-  climate: 0
+  point: 1

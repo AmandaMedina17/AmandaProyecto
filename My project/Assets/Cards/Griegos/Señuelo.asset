@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dda1a26944933df4c8ea5e4b60c47e76, type: 3}
   m_Name: "Se\xF1uelo"
   m_EditorClassIdentifier: 
-  id: 16
+  id: 18
   name: "Se\xF1uelo"
   faction: Dioses Griegos
   cardDescription: Coloca esta carta en el lugar de una carta del campo para regresar
@@ -20,7 +20,7 @@ MonoBehaviour:
   spriteImage: {fileID: 21300000, guid: e8f303fee463432408d65213ce5bcd90, type: 3}
   color: White
   power: 0
+  initialPower: 0
   zone: 
   cardType: Special
-  increase: 0
-  climate: 0
+  point: 0

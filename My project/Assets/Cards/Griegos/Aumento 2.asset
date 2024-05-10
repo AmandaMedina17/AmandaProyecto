@@ -20,7 +20,7 @@ MonoBehaviour:
   spriteImage: {fileID: 21300000, guid: 036b608f3d3b6104c94057a1efeaeda4, type: 3}
   color: White
   power: 0
+  initialPower: 0
   zone: AuR
   cardType: Special
-  increase: 0
-  climate: 0
+  point: 0

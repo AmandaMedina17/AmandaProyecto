@@ -19,6 +19,12 @@ public class ScriptZone : MonoBehaviour
     public List<GameObject> IncreaseRangeEnemy;
 
 
+    public static bool climateMelee;
+    public static bool climateMeleeEnemy;
+    public static bool climateSiege;
+    public static bool climateSiegeEnemy;
+    public static bool climateRange;
+    public static bool climateRangeEnemy;
 
 
 
@@ -102,6 +108,8 @@ public class ScriptZone : MonoBehaviour
             Destroy(IncreaseSiegeEnemy[i]);
         }
 
+
+      
         /* Melee = new List<GameObject>;
          Melee = new List<GameObject>;
          Melee = new List<GameObject>;
@@ -110,9 +118,9 @@ public class ScriptZone : MonoBehaviour
          Melee = new List<GameObject>;
          Melee = new List<GameObject>;
          Melee = new List<GameObject>;
-         Melee = new List<GameObject>;
+         Melee = new List<GameObject>;*/
 
-        /*Melee.Clear();
+        Melee.Clear();
         MeleeEnemy.Clear();
         Siege.Clear();
         SiegeEnemy.Clear();
@@ -124,6 +132,6 @@ public class ScriptZone : MonoBehaviour
         IncreaseSiege.Clear();
         IncreaseSiegeEnemy.Clear();
         IncreaseRange.Clear();
-        IncreaseRangeEnemy.Clear();*/
+        IncreaseRangeEnemy.Clear();
     }
 }

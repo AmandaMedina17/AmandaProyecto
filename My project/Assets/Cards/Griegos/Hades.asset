@@ -18,8 +18,8 @@ MonoBehaviour:
   cardDescription: "Elimina la carta con m\xE1s poder del campo (propio o del rival)"
   spriteImage: {fileID: 21300000, guid: 7d4b6034669cad74ab00bfc49f96aff8, type: 3}
   color: Golden
-  power: 6
+  power: 5
+  initialPower: 5
   zone: S
   cardType: Gold
-  increase: 0
-  climate: 0
+  point: 1

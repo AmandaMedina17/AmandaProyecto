@@ -57,6 +57,17 @@ public class TurnSystem : MonoBehaviour
             player1Turn = false;
         }
 
+        /*if(LeaderZeus.leaderZeus == true && ButtonPass.player2Pass == false)
+        {
+            EndPlayer1Turn();
+            LeaderZeus.leaderZeus = false;
+        }
+        else if(LeaderOdín.leaderOdin == true && ButtonPass.player1Pass == false)
+        {
+            EndPlayer2Turn();
+            LeaderOdín.leaderOdin = false;
+        }*/
+
     }
 
     public void EndPlayer1Turn()

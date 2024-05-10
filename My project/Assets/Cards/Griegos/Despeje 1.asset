@@ -10,16 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dda1a26944933df4c8ea5e4b60c47e76, type: 3}
-  m_Name: Despeje
+  m_Name: Despeje 1
   m_EditorClassIdentifier: 
   id: 15
-  name: Despeje
+  name: Despeje 1
   faction: Dioses Griegos
-  cardDescription: Despeja el clima eliminando una carta de tipo clima
+  cardDescription: Despeja el clima eliminando una carta de tipo clima en la fila
+    Melee
   spriteImage: {fileID: 21300000, guid: adeb2c2cca353ce4894df623a551f480, type: 3}
   color: White
   power: 0
+  initialPower: 0
   zone: Cl
   cardType: Special
-  increase: 0
-  climate: 0
+  point: 0

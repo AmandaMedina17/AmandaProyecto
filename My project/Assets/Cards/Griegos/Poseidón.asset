@@ -18,8 +18,8 @@ MonoBehaviour:
   cardDescription: Inunda la fila Melee
   spriteImage: {fileID: 21300000, guid: 54afa305d3844f54aa57ba3b128239a4, type: 3}
   color: Golden
-  power: 5
+  power: 6
+  initialPower: 6
   zone: R
   cardType: Gold
-  increase: 0
-  climate: 0
+  point: 0

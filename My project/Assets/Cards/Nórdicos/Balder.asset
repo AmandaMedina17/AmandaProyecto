@@ -15,11 +15,11 @@ MonoBehaviour:
   id: 3
   name: Balder
   faction: "Dioses N\xF3rdicos"
-  cardDescription: Coloca un aumento en una fila propia
+  cardDescription: Coloca un aumento de un punto en la fila Melee
   spriteImage: {fileID: 21300000, guid: 8827d80e97e40054385ad055c94ca2fe, type: 3}
   color: Silver
-  power: 4
+  power: 5
+  initialPower: 4
   zone: M
   cardType: Silver
-  increase: 0
-  climate: 0
+  point: 1

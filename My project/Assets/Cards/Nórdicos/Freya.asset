@@ -20,7 +20,7 @@ MonoBehaviour:
   spriteImage: {fileID: 21300000, guid: fbf65e6e7fb29a0429e7b18d955d8260, type: 3}
   color: Silver
   power: 3
+  initialPower: 3
   zone: R
   cardType: Silver
-  increase: 0
-  climate: 0
+  point: 1

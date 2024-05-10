@@ -19,7 +19,7 @@ MonoBehaviour:
   spriteImage: {fileID: 21300000, guid: 49fb141f137324747909b18a7eece006, type: 3}
   color: Silver
   power: 4
+  initialPower: 4
   zone: M
   cardType: Silver
-  increase: 0
-  climate: 0
+  point: 1

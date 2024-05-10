@@ -19,7 +19,7 @@ MonoBehaviour:
   spriteImage: {fileID: 21300000, guid: 32c57a6b9e80e56449665ffd25851072, type: 3}
   color: Golden
   power: 6
+  initialPower: 6
   zone: R
   cardType: Gold
-  increase: 0
-  climate: 0
+  point: 0

@@ -19,7 +19,7 @@ MonoBehaviour:
   spriteImage: {fileID: 21300000, guid: abae003c78bd24b4e860fdd2e8f38179, type: 3}
   color: White
   power: 0
+  initialPower: 0
   zone: Cl
   cardType: Special
-  increase: 0
-  climate: 0
+  point: 0
