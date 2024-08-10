@@ -586,44 +586,25 @@ public class Effects : MonoBehaviour
     //Efecto multiplicar por n su ataque
     public void MultiplyPowerGreek()
     {
-        if(melee.Melee.Contains(this.gameObject))
+        bool found = false;
+        int index = 0;
+        while (index < range.Range.Count && !found)
         {
-            MultiplyCardPowerMelee();
-        }
-        else if(range.Range.Contains(this.gameObject))
-        {
-            MultiplyCardPowerRange();
-        }
-        else if(siege.Siege.Contains(this.gameObject))
-        {
-            MultiplyCardPowerSiege();
+            if(range.Range[index] != null && range.Range[index].gameObject.GetComponent<DisplayCard>().card.id == 8)
+            {
+                found = true; 
+                MultiplyCardPowerRange();
+                Debug.Log("si lo contiene");
+                
+               
+            }
+            else 
+            {
+                Debug.LogWarning("No hay cartas iguales");
+                index++;
+            }
         }
 
-        void MultiplyCardPowerMelee()
-        {
-            int count = 1;
-            for (int i = 0; i < melee.Melee.Count; i++)
-            {
-                if(melee.Melee[i].GetComponent<DisplayCard>().card.name == this.gameObject.GetComponent<DisplayCard>().card.name)
-                {
-                    count++;
-                }
-            }
-            this.gameObject.GetComponent<DisplayCard>().card.power *= count;
-        }
-
-        void MultiplyCardPowerSiege()
-        {
-            int count = 1;
-            for (int i = 0; i < siege.Siege.Count; i++)
-            {
-                if(siege.Siege[i].GetComponent<DisplayCard>().card.name == this.gameObject.GetComponent<DisplayCard>().card.name)
-                {
-                    count++;
-                }
-            }
-            this.gameObject.GetComponent<DisplayCard>().card.power *= count;
-        }
 
         void MultiplyCardPowerRange()
         {
@@ -633,6 +614,7 @@ public class Effects : MonoBehaviour
                 if(range.Range[i].GetComponent<DisplayCard>().card.name == this.gameObject.GetComponent<DisplayCard>().card.name)
                 {
                     count++;
+                    Debug.Log("suma 1");
                 }
             }
             this.gameObject.GetComponent<DisplayCard>().card.power *= count;
@@ -641,34 +623,28 @@ public class Effects : MonoBehaviour
         
     }
 
-     public void MultiplyPowerNordic()
+    public void MultiplyPowerNordic()
     {
-        if(meleeEnemy.MeleeEnemy.Contains(this.gameObject))
-        {
-            MultiplyCardPowerMelee();
-        }
-        else if(rangeEnemy.RangeEnemy.Contains(this.gameObject))
-        {
-            MultiplyCardPowerRange();
-        }
-        else if(siegeEnemy.SiegeEnemy.Contains(this.gameObject))
-        {
-            MultiplyCardPowerSiege();
-        }
 
-        void MultiplyCardPowerMelee()
+        bool found = false;
+        int index = 0;
+        while (index < siegeEnemy.SiegeEnemy.Count && !found)
         {
-            int count = 1;
-            for (int i = 0; i < meleeEnemy.MeleeEnemy.Count; i++)
+            if(siegeEnemy.SiegeEnemy[index] != null && siegeEnemy.SiegeEnemy[index].gameObject.GetComponent<DisplayCard>().card.id == 8)
             {
-                if(meleeEnemy.MeleeEnemy[i].GetComponent<DisplayCard>().card.name == this.gameObject.GetComponent<DisplayCard>().card.name)
-                {
-                    count++;
-                }
+                found = true; 
+                MultiplyCardPowerSiege();
+                Debug.Log("si lo contiene");
+                
+               
             }
-            this.gameObject.GetComponent<DisplayCard>().card.power *= count;
+            else 
+            {
+                Debug.LogWarning("No hay cartas iguales");
+                index++;
+            }
         }
-
+         
         void MultiplyCardPowerSiege()
         {
             int count = 1;
@@ -680,21 +656,7 @@ public class Effects : MonoBehaviour
                 }
             }
             this.gameObject.GetComponent<DisplayCard>().card.power *= count;
-        }
-
-        void MultiplyCardPowerRange()
-        {
-            int count = 1;
-            for (int i = 0; i < rangeEnemy.RangeEnemy.Count; i++)
-            {
-                if(rangeEnemy.RangeEnemy[i].GetComponent<DisplayCard>().card.name == this.gameObject.GetComponent<DisplayCard>().card.name)
-                {
-                    count++;
-                }
-            }
-            this.gameObject.GetComponent<DisplayCard>().card.power *= count;
-        }
-        
+        }    
         
     }
 
@@ -929,7 +891,10 @@ public class Effects : MonoBehaviour
         {
             for (int i = 0; i < melee.Melee.Count; i++)
             {
-                melee.Melee[i].GetComponent<DisplayCard>().card.power -= 2;
+                if(melee.Melee[i].GetComponent<DisplayCard>().card.cardType == "Silver")
+                {
+                    melee.Melee[i].GetComponent<DisplayCard>().card.power -= 2;
+                }
             }
 
             ScriptZone.climateMelee = true;
@@ -938,7 +903,10 @@ public class Effects : MonoBehaviour
         {
             for (int i = 0; i < meleeEnemy.MeleeEnemy.Count; i++)
             {
-                meleeEnemy.MeleeEnemy[i].GetComponent<DisplayCard>().card.power -= 2;
+                if(meleeEnemy.MeleeEnemy[i].GetComponent<DisplayCard>().card.cardType == "Silver")
+                {
+                    meleeEnemy.MeleeEnemy[i].GetComponent<DisplayCard>().card.power -= 2;
+                }
             }
             ScriptZone.climateMeleeEnemy = true;
         }
@@ -960,7 +928,10 @@ public class Effects : MonoBehaviour
         {
             for (int i = 0; i < range.Range.Count; i++)
             {
-                range.Range[i].GetComponent<DisplayCard>().card.power = range.Range[i].GetComponent<DisplayCard>().card.power - 2;
+                if(range.Range[i].GetComponent<DisplayCard>().card.cardType == "Silver")
+                {
+                    range.Range[i].GetComponent<DisplayCard>().card.power = range.Range[i].GetComponent<DisplayCard>().card.power - 2;
+                }
             }
             ScriptZone.climateRange = true;
         }
@@ -968,7 +939,11 @@ public class Effects : MonoBehaviour
         {
             for (int i = 0; i < rangeEnemy.RangeEnemy.Count; i++)
             {
-                rangeEnemy.RangeEnemy[i].GetComponent<DisplayCard>().card.power = rangeEnemy.RangeEnemy[i].GetComponent<DisplayCard>().card.power - 2;
+                if(rangeEnemy.RangeEnemy[i].GetComponent<DisplayCard>().card.cardType == "Silver")
+                {
+                    rangeEnemy.RangeEnemy[i].GetComponent<DisplayCard>().card.power = rangeEnemy.RangeEnemy[i].GetComponent<DisplayCard>().card.power - 2;
+                }
+                
             }
             ScriptZone.climateRangeEnemy = true;
         }
@@ -989,7 +964,10 @@ public class Effects : MonoBehaviour
         {
             for (int i = 0; i < siege.Siege.Count; i++)
             {
-                siege.Siege[i].GetComponent<DisplayCard>().card.power -= 2;
+                if(siege.Siege[i].GetComponent<DisplayCard>().card.cardType == "Silver")
+                {
+                    siege.Siege[i].GetComponent<DisplayCard>().card.power -= 2;
+                }
             }
              ScriptZone.climateSiege = true;
         }
@@ -997,7 +975,11 @@ public class Effects : MonoBehaviour
         {
             for (int i = 0; i < siegeEnemy.SiegeEnemy.Count; i++)
             {
-                siegeEnemy.SiegeEnemy[i].GetComponent<DisplayCard>().card.power -= 2;
+                if(siegeEnemy.SiegeEnemy[i].GetComponent<DisplayCard>().card.cardType == "Silver")
+                {
+                    siegeEnemy.SiegeEnemy[i].GetComponent<DisplayCard>().card.power -= 2;
+                }
+               
             }
             ScriptZone.climateSiegeEnemy = true;
         }
@@ -1015,7 +997,11 @@ public class Effects : MonoBehaviour
         {
             for (int i = 0; i < melee.Melee.Count; i++)
             {
-                melee.Melee[i].GetComponent<DisplayCard>().card.power += 2;
+                if(melee.Melee[i].GetComponent<DisplayCard>().card.cardType == "Silver")
+                {
+                    melee.Melee[i].GetComponent<DisplayCard>().card.power += 2;
+                }
+                
             }
         } 
     }
@@ -1031,7 +1017,11 @@ public class Effects : MonoBehaviour
         {
             for (int i = 0; i < meleeEnemy.MeleeEnemy.Count; i++)
             {
-                meleeEnemy.MeleeEnemy[i].GetComponent<DisplayCard>().card.power += 2;
+                if(meleeEnemy.MeleeEnemy[i].GetComponent<DisplayCard>().card.cardType == "Silver")
+                {
+                    meleeEnemy.MeleeEnemy[i].GetComponent<DisplayCard>().card.power += 2;
+                }
+                
             }
         } 
     }
@@ -1047,7 +1037,11 @@ public class Effects : MonoBehaviour
         {
             for (int i = 0; i < range.Range.Count; i++)
             {
-                range.Range[i].GetComponent<DisplayCard>().card.power += 2;
+                if(range.Range[i].GetComponent<DisplayCard>().card.cardType == "Silver")
+                {
+                    range.Range[i].GetComponent<DisplayCard>().card.power += 2;
+                }
+               
             }
         } 
     }
@@ -1063,7 +1057,11 @@ public class Effects : MonoBehaviour
         {
             for (int i = 0; i < rangeEnemy.RangeEnemy.Count; i++)
             {
-                rangeEnemy.RangeEnemy[i].GetComponent<DisplayCard>().card.power += 2;
+                if(rangeEnemy.RangeEnemy[i].GetComponent<DisplayCard>().card.cardType == "Silver")
+                {
+                    rangeEnemy.RangeEnemy[i].GetComponent<DisplayCard>().card.power += 2;
+                }
+                
             }
         } 
     }
@@ -1079,7 +1077,11 @@ public class Effects : MonoBehaviour
         {
             for (int i = 0; i < siege.Siege.Count; i++)
             {
-                siege.Siege[i].GetComponent<DisplayCard>().card.power += 2;
+                if(siege.Siege[i].GetComponent<DisplayCard>().card.cardType == "Silver")
+                {
+                    siege.Siege[i].GetComponent<DisplayCard>().card.power += 2;
+                }
+               
             }
         } 
     }
@@ -1095,7 +1097,11 @@ public class Effects : MonoBehaviour
         {
             for (int i = 0; i < siegeEnemy.SiegeEnemy.Count; i++)
             {
-                siegeEnemy.SiegeEnemy[i].GetComponent<DisplayCard>().card.power += 2;
+                if(siegeEnemy.SiegeEnemy[i].GetComponent<DisplayCard>().card.cardType == "Silver")
+                {
+                    siegeEnemy.SiegeEnemy[i].GetComponent<DisplayCard>().card.power += 2;
+                }
+                
             }
         } 
     }
@@ -1112,7 +1118,11 @@ public class Effects : MonoBehaviour
         {
             for (int i = 0; i < melee.Melee.Count; i++)
             {
-                melee.Melee[i].GetComponent<DisplayCard>().card.power += 2;
+                if(melee.Melee[i].GetComponent<DisplayCard>().card.cardType == "Silver")
+                {
+                   melee.Melee[i].GetComponent<DisplayCard>().card.power += 2; 
+                }
+                
             }
         }
          
@@ -1125,7 +1135,11 @@ public class Effects : MonoBehaviour
         {
             for (int i = 0; i < meleeEnemy.MeleeEnemy.Count; i++)
             {
-                meleeEnemy.MeleeEnemy[i].GetComponent<DisplayCard>().card.power += 2;
+                if(melee.Melee[i].GetComponent<DisplayCard>().card.cardType == "Silver")
+                {
+                    meleeEnemy.MeleeEnemy[i].GetComponent<DisplayCard>().card.power += 2;
+                }
+                
             }
         }
 
@@ -1173,7 +1187,10 @@ public class Effects : MonoBehaviour
         {
             for (int i = 0; i < range.Range.Count; i++)
             {
-                range.Range[i].GetComponent<DisplayCard>().card.power += 2;
+                if(range.Range[i].GetComponent<DisplayCard>().card.cardType == "Silver")
+                {
+                    range.Range[i].GetComponent<DisplayCard>().card.power += 2;
+                }
             }
         } 
         
@@ -1186,7 +1203,11 @@ public class Effects : MonoBehaviour
         {
             for (int i = 0; i < rangeEnemy.RangeEnemy.Count; i++)
             {
-                rangeEnemy.RangeEnemy[i].GetComponent<DisplayCard>().card.power += 2;
+                if(rangeEnemy.RangeEnemy[i].GetComponent<DisplayCard>().card.cardType == "Silver")
+                {
+                    rangeEnemy.RangeEnemy[i].GetComponent<DisplayCard>().card.power += 2;
+                }
+                
             }
         } 
 
@@ -1236,7 +1257,11 @@ public class Effects : MonoBehaviour
         {
             for (int i = 0; i < siege.Siege.Count; i++)
             {
-                siege.Siege[i].GetComponent<DisplayCard>().card.power += 2;
+                if(siege.Siege[i].GetComponent<DisplayCard>().card.cardType == "Silver")
+                {
+                    siege.Siege[i].GetComponent<DisplayCard>().card.power += 2;
+                }
+               
             }
         } 
         
@@ -1249,7 +1274,11 @@ public class Effects : MonoBehaviour
         {
             for (int i = 0; i < siegeEnemy.SiegeEnemy.Count; i++)
             {
-                siegeEnemy.SiegeEnemy[i].GetComponent<DisplayCard>().card.power += 2;
+                if(siege.Siege[i].GetComponent<DisplayCard>().card.cardType == "Silver")
+                {
+                    siegeEnemy.SiegeEnemy[i].GetComponent<DisplayCard>().card.power += 2;
+                }
+                
             }
         } 
 
