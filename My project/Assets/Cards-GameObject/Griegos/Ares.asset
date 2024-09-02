@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 733666c5382f6d24ca35ca6829bf3fe5, type: 3}
+  m_Name: Ares
+  m_EditorClassIdentifier: 
+  Name: Ares
+  Faction: 1
+  TipoDeCarta: 0
+  destinations: 02000000
+  spriteImage: {fileID: 21300000, guid: 49fb141f137324747909b18a7eece006, type: 3}
+  cardDescription: 
+  Power: 3
+  worth: 1

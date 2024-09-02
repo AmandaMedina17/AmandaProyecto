@@ -1,0 +1,6 @@
+interface IInvocable
+{
+    int aridad();
+   
+}
+

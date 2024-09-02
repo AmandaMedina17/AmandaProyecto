@@ -1,22 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEditor;
 
 public class ScriptZone : MonoBehaviour
 {
-    public List<GameObject> Melee;
-    public List<GameObject> MeleeEnemy;
-    public List<GameObject> Siege;
-    public List<GameObject> SiegeEnemy;
-    public List<GameObject> Range;
-    public List<GameObject> RangeEnemy;
-    public List<GameObject> Climate;
-    public List<GameObject> IncreaseMelee;
-    public List<GameObject> IncreaseMeleeEnemy;
-    public List<GameObject> IncreaseSiege;
-    public List<GameObject> IncreaseSiegeEnemy;
-    public List<GameObject> IncreaseRange;
-    public List<GameObject> IncreaseRangeEnemy;
+    public List<UnityBaseCard> Cards;
+    /*public List<BaseCard> NordicMelee;
+    public List<BaseCard> GreekSiege;
+    public List<BaseCard> NordicSiege;
+    public List<BaseCard> GreekRange;
+    public List<BaseCard> NordicRange;
+    public List<BaseCard> Climate;
+    public List<BaseCard> GreekIncreaseMelee;
+    public List<BaseCard> NordicIncreaseMelee;
+    public List<BaseCard> GreekIncreaseSiege;
+    public List<BaseCard> NordicIncreaseSiege;
+    public List<BaseCard> GreekIncreaseRange;
+    public List<BaseCard> NordicIncreaseRange;
 
 
     public static bool climateMelee;
@@ -24,9 +26,43 @@ public class ScriptZone : MonoBehaviour
     public static bool climateSiege;
     public static bool climateSiegeEnemy;
     public static bool climateRange;
-    public static bool climateRangeEnemy;
+    public static bool climateRangeEnemy;*/
 
+    public void UpdateList()
+    {
+        GridLayoutGroup gridLayoutGroup = GetComponent<GridLayoutGroup>();
+        GameObject[] hijos = CogerLosHijos(gridLayoutGroup);
 
+        foreach(GameObject hijo in hijos)
+        {
+            Destroy(hijo);
+        }
+
+        foreach(UnityBaseCard card in Cards)
+        {
+            InstanciarCarta(card, gridLayoutGroup);
+        }
+    }
+
+    private GameObject[] CogerLosHijos(GridLayoutGroup gridLayoutGroup)
+    {
+        GameObject[] hijos = new GameObject[gridLayoutGroup.transform.childCount];
+
+        for (int i = 0; i < gridLayoutGroup.transform.childCount; i++)
+        {
+            hijos[i] = gridLayoutGroup.transform.GetChild(i).gameObject;
+        }
+        return hijos;
+    }
+
+    private void InstanciarCarta(UnityBaseCard card, GridLayoutGroup gridLayoutGroup)
+    {
+        GameObject cardPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/CardPrefab.prefab");
+        GameObject cardCopy = GameObject.Instantiate(cardPrefab);
+        cardCopy.GetComponent<Display>().card = (UnityBaseCard)card;
+        string name = cardCopy.GetComponent<Display>().card.Name;
+        cardCopy.transform.SetParent(gridLayoutGroup.transform, false);
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -40,7 +76,7 @@ public class ScriptZone : MonoBehaviour
         
     }
 
-    public void ClearZones()
+   /* public void ClearZones()
     {
         for (int i = 0; i < Melee.Count; i++)
         {
@@ -118,7 +154,7 @@ public class ScriptZone : MonoBehaviour
          Melee = new List<GameObject>;
          Melee = new List<GameObject>;
          Melee = new List<GameObject>;
-         Melee = new List<GameObject>;*/
+         Melee = new List<GameObject>;
 
         Melee.Clear();
         MeleeEnemy.Clear();
@@ -133,5 +169,5 @@ public class ScriptZone : MonoBehaviour
         IncreaseSiegeEnemy.Clear();
         IncreaseRange.Clear();
         IncreaseRangeEnemy.Clear();
-    }
+    }*/
 }
