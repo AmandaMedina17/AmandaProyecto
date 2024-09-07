@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-/*public class ZonasTablero : MonoBehaviour
+public class ZonasTablero : MonoBehaviour
 {
     public Players player;
     public ZonasdelTablero zonasDelTablero;
@@ -17,4 +17,4 @@ using UnityEngine;
     {
         
     }
-}*/
+}

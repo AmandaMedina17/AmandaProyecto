@@ -1,25 +1,41 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 using System;
 public static class SavedEffects
 {
-    public static Dictionary<string, EffectDelegate> efectos = new Dictionary<string, EffectDelegate>();
+    static ScriptZone GreekMelee = GameObject.Find("GreekMelee").GetComponent<ScriptZone>();
+    static ScriptZone NordicMelee = GameObject.Find("NordicMelee").GetComponent<ScriptZone>();
+    static ScriptZone GreekRange = GameObject.Find("GreekRange").GetComponent<ScriptZone>();
+    static ScriptZone NordicRange = GameObject.Find("NordicRange").GetComponent<ScriptZone>();
+    static ScriptZone GreekSiege = GameObject.Find("GreekSiege").GetComponent<ScriptZone>();
+    static ScriptZone NordicSiege = GameObject.Find("NordicSiege").GetComponent<ScriptZone>();
+    static ScriptZone Climate = GameObject.Find("Climate").GetComponent<ScriptZone>();
+    static ScriptZone GreekIncreaseMelee = GameObject.Find("GreekIncreaseMelee").GetComponent<ScriptZone>();
+    static ScriptZone GreekIncreaseRange = GameObject.Find("GreekIncreaseRange").GetComponent<ScriptZone>();
+    static ScriptZone GreekIncreaseSiege = GameObject.Find("GreekIncreaseSiege").GetComponent<ScriptZone>();
+    static ScriptZone NordicIncreaseMelee = GameObject.Find("NordicIncreaseMelee").GetComponent<ScriptZone>();
+    static ScriptZone NordicIncreaseRange = GameObject.Find("NordicIncreaseRange").GetComponent<ScriptZone>();
+    static ScriptZone NordicIncreaseSiege = GameObject.Find("NordicIncreaseSiege").GetComponent<ScriptZone>();
+    static ScriptZone GreekGraveyard = GameObject.Find("GreekGraveyard").GetComponent<ScriptZone>();
+    static ScriptZone NordicGraveyard = GameObject.Find("NordicGraveyard").GetComponent<ScriptZone>();
 
+    
     public static void AgregarEfecto(string name, EffectDelegate effect)
     {
-        efectos.Add(name, effect);
+        effects.Add(name, effect);
     }
 
     public static EffectDelegate ObtenerEfecto(string name)
     {
         try
         {
-            return efectos[name];
+            return effects[name];
         }
         catch (System.ArgumentOutOfRangeException)
         {
-            return efectos["Empty"];
+            return effects["Empty"];
         }
     }
 
@@ -35,6 +51,27 @@ public static class SavedEffects
         }
     }
 
+    private static void UpdateLists()
+    {
+        GreekMelee.UpdateList();
+        NordicMelee.UpdateList();
+        GreekRange.UpdateList();
+        NordicRange.UpdateList();
+        GreekSiege.UpdateList();
+        NordicSiege.UpdateList();
+        GreekIncreaseMelee.UpdateList();
+        NordicIncreaseMelee.UpdateList();
+        GreekIncreaseRange.UpdateList();
+        NordicIncreaseRange.UpdateList();
+        GreekIncreaseSiege.UpdateList();
+        NordicIncreaseSiege.UpdateList();
+        Climate.UpdateList();
+        GreekGraveyard.UpdateList();
+        NordicGraveyard.UpdateList();
+    }
+
+
+
     //Efectos
     public static bool EmptyEffect(EstadoDeJuego estadoDeJuego)
     {
@@ -42,114 +79,223 @@ public static class SavedEffects
     }
     public static bool DrawCard(EstadoDeJuego estadoDeJuego)
     {
-        if (!(estadoDeJuego.player.Deck.Count == 0)) 
+        if (estadoDeJuego.player == Player.Griegos)
         {
-            estadoDeJuego.player.Hand.Add(estadoDeJuego.player.Deck[0]);
+            ScriptZone hand = GameObject.Find("GreekHand").GetComponent<ScriptZone>();
+            List<UnityBaseCard> deck = DeckManager.player1Deck;
+             if (hand.Cards.Count < 1)
+            {
+                Debug.LogError("No hay suficientes cartas en el mazo.");
+                return false;
+            }
+
+            // Baraja el mazo
+            List<UnityBaseCard> shuffledDeck = deck.OrderBy(x => UnityEngine.Random.value).ToList();
+           
+            hand.Cards.Add(shuffledDeck[0]);
+            hand.UpdateList();
+            deck.RemoveRange(0, 1);
+
             return true;
         }
         else 
         {
-            System.Console.WriteLine("There are no more cards in the deck.");
-            return false;
+            ScriptZone hand = GameObject.Find("NordicHand").GetComponent<ScriptZone>();
+            List<UnityBaseCard> deck = DeckManager.player2Deck;
+             if (hand.Cards.Count < 1)
+            {
+                Debug.LogError("No hay suficientes cartas en el mazo.");
+                return false;
+            }
+
+            // Baraja el mazo
+            List<UnityBaseCard> shuffledDeck = deck.OrderBy(x => UnityEngine.Random.value).ToList();
+           
+            hand.Cards.Add(shuffledDeck[0]);
+            hand.UpdateList();
+            deck.RemoveRange(0, 1);
+
+            return true;
         }
     }
 
     public static bool EliminateMostPowerfullCard(EstadoDeJuego estadoDeJuego)
     {
-        BaseCard mostPowerfulCard = null;
+        UnityBaseCard mostPowerfulCard = null;
         int maxPower = int.MinValue;
 
-        if(estadoDeJuego.enemy.zonasdelplayer.MeleeZone.Count > 0)
+        if(estadoDeJuego.enemy == Player.Griegos)
         {
-            FindMostPowerfulCardInListMelee();
-        }
-        else if(estadoDeJuego.enemy.zonasdelplayer.RangedZone.Count >0)
-        {
-            FindMostPowerfulCardInListRange();
-        }
+            if(GreekMelee.Cards.Count > 0) FindMostPowerfulCardInListMelee();
+            else if(GreekRange.Cards.Count >0) FindMostPowerfulCardInListRange();
+            else if(GreekSiege.Cards.Count > 0) FindMostPowerfulCardInListSiege();
+            else return false;
         
-        else if(estadoDeJuego.enemy.zonasdelplayer.SiegeZone.Count > 0)
+            void FindMostPowerfulCardInListMelee()
+            {
+                for (int i = 0; i < GreekMelee.Cards.Count; i++)
+                {
+            
+                    if(GreekMelee.Cards[i].Power  > maxPower)
+                    {
+                        mostPowerfulCard = GreekMelee.Cards[i];
+                        maxPower = GreekMelee.Cards[i].Power;
+                    }
+                }
+            }
+    
+            void FindMostPowerfulCardInListRange()
+            {
+                for (int i = 0; i < GreekRange.Cards.Count; i++)
+                {
+            
+                    if(GreekRange.Cards[i].Power > maxPower)
+                    {
+                        mostPowerfulCard = GreekRange.Cards[i];
+                        maxPower = GreekRange.Cards[i].Power;
+                    }
+                }
+            }
+
+            void FindMostPowerfulCardInListSiege()
+            {
+                for (int i = 0; i < GreekSiege.Cards.Count; i++)
+                {
+                
+                    if(GreekSiege.Cards[i].Power > maxPower)
+                    {
+                        mostPowerfulCard = GreekSiege.Cards[i];
+                        maxPower = GreekSiege.Cards[i].Power;
+                    }
+                }    
+            }
+            if(mostPowerfulCard != null)
+            {
+                if(GreekMelee.Cards.Contains(mostPowerfulCard)) 
+                {
+                    GreekMelee.Cards.Remove(mostPowerfulCard);
+                    GreekMelee.UpdateList();
+                }
+                else if(GreekRange.Cards.Contains(mostPowerfulCard)) 
+                {
+                    GreekRange.Cards.Remove(mostPowerfulCard);
+                    GreekRange.UpdateList();
+                }
+                else if(GreekSiege.Cards.Contains(mostPowerfulCard)) 
+                {
+                    GreekSiege.Cards.Remove(mostPowerfulCard);
+                    GreekSiege.UpdateList();
+                }
+                GreekGraveyard.Cards.Add(mostPowerfulCard);
+                GreekGraveyard.UpdateList();
+            }
+
+            return true;
+        }
+
+        if(estadoDeJuego.enemy == Player.Nordicos)
         {
-            FindMostPowerfulCardInListSiege();
+            if(NordicMelee.Cards.Count > 0) FindMostPowerfulCardInListMelee();
+            else if(NordicRange.Cards.Count >0) FindMostPowerfulCardInListRange();
+            else if(NordicSiege.Cards.Count > 0) FindMostPowerfulCardInListSiege();
+            else return false;
+        
+            void FindMostPowerfulCardInListMelee()
+            {
+                for (int i = 0; i < NordicMelee.Cards.Count; i++)
+                {
+            
+                    if(NordicMelee.Cards[i].Power  > maxPower)
+                    {
+                        mostPowerfulCard = NordicMelee.Cards[i];
+                        maxPower = NordicMelee.Cards[i].Power;
+                    }
+                }
+            }
+    
+            void FindMostPowerfulCardInListRange()
+            {
+                for (int i = 0; i < NordicRange.Cards.Count; i++)
+                {
+            
+                    if(NordicRange.Cards[i].Power > maxPower)
+                    {
+                        mostPowerfulCard = NordicRange.Cards[i];
+                        maxPower = NordicRange.Cards[i].Power;
+                    }
+                }
+            }
+
+            void FindMostPowerfulCardInListSiege()
+            {
+                for (int i = 0; i < NordicSiege.Cards.Count; i++)
+                {
+                
+                    if(NordicSiege.Cards[i].Power > maxPower)
+                    {
+                        mostPowerfulCard = NordicSiege.Cards[i];
+                        maxPower = NordicSiege.Cards[i].Power;
+                    }
+                }    
+            }
+            if(mostPowerfulCard != null)
+            {
+                if(NordicMelee.Cards.Contains(mostPowerfulCard)) 
+                {
+                    NordicMelee.Cards.Remove(mostPowerfulCard);
+                    NordicMelee.UpdateList();
+                }
+                else if(NordicRange.Cards.Contains(mostPowerfulCard)) 
+                {
+                    NordicRange.Cards.Remove(mostPowerfulCard);
+                    NordicRange.UpdateList();
+                }
+                else if(NordicSiege.Cards.Contains(mostPowerfulCard)) 
+                {
+                    NordicSiege.Cards.Remove(mostPowerfulCard);
+                    NordicSiege.UpdateList();
+                }
+                NordicGraveyard.Cards.Add(mostPowerfulCard);
+                NordicGraveyard.UpdateList();
+            }
+
+            return true;
         }
         else return false;
-      
-        void FindMostPowerfulCardInListMelee()
-        {
-            for (int i = 0; i < estadoDeJuego.enemy.zonasdelplayer.MeleeZone.Count; i++)
-            {
-           
-                if(estadoDeJuego.enemy.zonasdelplayer.MeleeZone[i].Power  > maxPower)
-                {
-                    mostPowerfulCard = estadoDeJuego.enemy.zonasdelplayer.MeleeZone[i];
-                    maxPower = estadoDeJuego.enemy.zonasdelplayer.MeleeZone[i].Power;
-                }
-            }
-        }
- 
-        void FindMostPowerfulCardInListRange()
-        {
-            for (int i = 0; i < estadoDeJuego.enemy.zonasdelplayer.RangedZone.Count; i++)
-            {
-          
-                if(estadoDeJuego.enemy.zonasdelplayer.RangedZone[i].Power > maxPower)
-                {
-                    mostPowerfulCard = estadoDeJuego.enemy.zonasdelplayer.RangedZone[i];
-                    maxPower = estadoDeJuego.enemy.zonasdelplayer.RangedZone[i].Power;
-                }
-            }
-        }
-
-        void FindMostPowerfulCardInListSiege()
-        {
-            for (int i = 0; i < estadoDeJuego.enemy.zonasdelplayer.SiegeZone.Count; i++)
-            {
-            
-                if(estadoDeJuego.enemy.zonasdelplayer.SiegeZone[i].Power > maxPower)
-                {
-                    mostPowerfulCard = estadoDeJuego.enemy.zonasdelplayer.SiegeZone[i];
-                    maxPower = estadoDeJuego.enemy.zonasdelplayer.SiegeZone[i].Power;
-                }
-            }    
-        }
-        if(mostPowerfulCard != null)
-        {
-            if(estadoDeJuego.enemy.zonasdelplayer.MeleeZone.Contains(mostPowerfulCard))
-            {
-                estadoDeJuego.enemy.zonasdelplayer.MeleeZone.Remove(mostPowerfulCard);
-            }
-            else if(estadoDeJuego.enemy.zonasdelplayer.RangedZone.Contains(mostPowerfulCard))
-            {
-                estadoDeJuego.enemy.zonasdelplayer.RangedZone.Remove(mostPowerfulCard);
-            }
-            else if(estadoDeJuego.enemy.zonasdelplayer.SiegeZone.Contains(mostPowerfulCard))
-            {
-                estadoDeJuego.enemy.zonasdelplayer.SiegeZone.Remove(mostPowerfulCard);
-            }
-        }
-
-        return true;
+        
     }
 
-     public static bool CalculateAverage(EstadoDeJuego estadoDeJuego)
+    public static bool CalculateAverage(EstadoDeJuego estadoDeJuego)
     {
         try{
-            List<UnitCard> list = new List<UnitCard>();
-            double Total = 0;
+            List<UnityUnitCard> listGreek = new List<UnityUnitCard>();
+            List<UnityUnitCard> listNordic = new List<UnityUnitCard>();
+            List<List<UnityBaseCard>> listaZonasGreek = new List<List<UnityBaseCard>>{GreekMelee.Cards, GreekRange.Cards, GreekSiege.Cards};
+            List<List<UnityBaseCard>> listaZonasNordic = new List<List<UnityBaseCard>>{NordicMelee.Cards, NordicRange.Cards, NordicSiege.Cards};
 
-            for (int i = 0; i < estadoDeJuego.player.zonasdelplayer.listaDeLasZonas.Count; i++)
+            int TotalGreek = 0;
+            int TotalNordic = 0;
+
+            for (int i = 0; i < 3; i++)
             {
-                Average(estadoDeJuego.player.zonasdelplayer.listaDeLasZonas[i], list, ref Total);
-                Average(estadoDeJuego.enemy.zonasdelplayer.listaDeLasZonas[i], list, ref Total);
+                Average(listaZonasGreek[i], listGreek, ref TotalGreek);
+                Average(listaZonasNordic[i], listNordic, ref TotalNordic);
             }
 
-            double average = Total / list.Count;
+            int averageGreek = listGreek.Count > 0 ? TotalGreek / listGreek.Count : 0;
+            int averageNordic = listNordic.Count > 0 ? TotalNordic / listNordic.Count : 0;
 
-            foreach (UnitCard item in list)
+            foreach (UnityUnitCard item in listGreek)
             {
-                if (item.worth == Worth.Silver) item.Power = (int)average;
+                if (item.worth == Worth.Silver) item.Power = averageGreek;
             }
-            return true;
+
+            foreach (UnityUnitCard item in listNordic)
+            {
+                if (item.worth == Worth.Silver) item.Power = averageNordic;
+            }
+                UpdateLists();
+                return true;
         }
         catch
         {
@@ -158,11 +304,11 @@ public static class SavedEffects
         
     }
 
-    static void Average(List<BaseCard> listToCheck, List<UnitCard> listToStore, ref double power)
+    static void Average(List<UnityBaseCard> listToCheck, List<UnityUnitCard> listToStore, ref int power)
     {
-        foreach (BaseCard item in listToCheck)
+        foreach (UnityBaseCard item in listToCheck)
         {
-            if (item is UnitCard unit)
+            if (item is UnityUnitCard unit)
             {
                 listToStore.Add(unit);
                 power += unit.Power;
@@ -172,34 +318,70 @@ public static class SavedEffects
 
     public static bool MultiplyPower(EstadoDeJuego estadoDeJuego)
     {
-        try
+        List<List<UnityBaseCard>> listaZonasGreek = new List<List<UnityBaseCard>>{GreekMelee.Cards, GreekRange.Cards, GreekSiege.Cards};
+        List<List<UnityBaseCard>> listaZonasNordic = new List<List<UnityBaseCard>>{NordicMelee.Cards, NordicRange.Cards, NordicSiege.Cards};
+
+        if(estadoDeJuego.player == Player.Griegos)
         {
-            int repetitions = 0; 
-            List<UnitCard> list = new List<UnitCard>();
-
-            for (int i = 0; i < estadoDeJuego.player.zonasdelplayer.listaDeLasZonas.Count; i++)
-                FindMatchingCards(estadoDeJuego.player.zonasdelplayer.listaDeLasZonas[i], (UnitCard)estadoDeJuego.card, list, ref repetitions);
-
-            foreach (UnitCard item in list)
+            try
             {
-                item.Power = repetitions * item.InitialPower;
+                int repetitions = 0; 
+                List<UnityUnitCard> list = new List<UnityUnitCard>();
+
+                for (int i = 0; i < listaZonasGreek.Count; i++)
+                    FindMatchingCardsGreek(listaZonasGreek[i], list, ref repetitions);
+
+                estadoDeJuego.card.Power *= repetitions;
+                return true;
             }
-            return true;
+            catch
+            {
+                return false;
+            }
         }
-        catch
+
+        else if(estadoDeJuego.player == Player.Nordicos)
         {
-            return false;
+            try
+            {
+                int repetitions = 0; 
+                List<UnityUnitCard> list = new List<UnityUnitCard>();
+
+                for (int i = 0; i < listaZonasGreek.Count; i++)
+                    FindMatchingCardsNordic(listaZonasNordic[i], list, ref repetitions);
+
+                estadoDeJuego.card.Power *= repetitions;
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        return false;
+        
+    }
+
+    static void FindMatchingCardsGreek(List<UnityBaseCard> list, List<UnityUnitCard> listToSave, ref int repetitions)
+    {
+        foreach (UnityBaseCard item in list)
+        {
+            if (item.Name == "Hefesto")
+            {
+                repetitions++;
+                listToSave.Add((UnityUnitCard)item);
+            }
         }
     }
 
-    static void FindMatchingCards(List<BaseCard> list, UnitCard card, List<UnitCard> listToSave, ref int repetitions)
+    static void FindMatchingCardsNordic(List<UnityBaseCard> list, List<UnityUnitCard> listToSave, ref int repetitions)
     {
-        foreach (BaseCard item in list)
+        foreach (UnityBaseCard item in list)
         {
-            if (card.Equals(item))
+            if (item.Name == "Skadi")
             {
                 repetitions++;
-                listToSave.Add((UnitCard)item);
+                listToSave.Add((UnityUnitCard)item);
             }
         }
     }
@@ -207,152 +389,781 @@ public static class SavedEffects
 
     public static bool RemoveLeastPowerfulCard(EstadoDeJuego estadoDeJuego)
     {
-        BaseCard leastPowerfulCard = null;
+        UnityBaseCard leastPowerfulCard = null;
         int minPower = int.MaxValue;
 
-        if(estadoDeJuego.enemy.zonasdelplayer.MeleeZone.Count > 0)
+        if(estadoDeJuego.enemy == Player.Griegos)
         {
-            FindleastPowerfulCardInListMelee();
-        }
-        else if(estadoDeJuego.enemy.zonasdelplayer.RangedZone.Count >0)
-        {
-            FindleastPowerfulCardInListRange();
-        }
+            if(GreekMelee.Cards.Count > 0) FindleastPowerfulCardInListMelee();
+            else if(GreekRange.Cards.Count >0) FindleastPowerfulCardInListRange();
+            else if(GreekSiege.Cards.Count > 0) FindleastPowerfulCardInListSiege();
+            else return false; 
         
-        else if(estadoDeJuego.enemy.zonasdelplayer.SiegeZone.Count > 0)
-        {
-            FindleastPowerfulCardInListSiege();
-        }
-        else return false; 
-      
-        void FindleastPowerfulCardInListMelee()
-        {
-            for (int i = 0; i < estadoDeJuego.enemy.zonasdelplayer.MeleeZone.Count; i++)
+            void FindleastPowerfulCardInListMelee()
             {
-           
-                if(estadoDeJuego.enemy.zonasdelplayer.MeleeZone[i].Power  < minPower)
+                for (int i = 0; i < GreekMelee.Cards.Count; i++)
                 {
-                    leastPowerfulCard = estadoDeJuego.enemy.zonasdelplayer.MeleeZone[i];
-                    minPower = estadoDeJuego.enemy.zonasdelplayer.MeleeZone[i].Power;
+            
+                    if(GreekMelee.Cards[i].Power  < minPower)
+                    {
+                        leastPowerfulCard = GreekMelee.Cards[i];
+                        minPower = GreekMelee.Cards[i].Power;
+                    }
                 }
             }
-        }
- 
-        void FindleastPowerfulCardInListRange()
-        {
-            for (int i = 0; i < estadoDeJuego.enemy.zonasdelplayer.RangedZone.Count; i++)
+    
+            void FindleastPowerfulCardInListRange()
             {
-          
-                if(estadoDeJuego.enemy.zonasdelplayer.RangedZone[i].Power < minPower)
+                for (int i = 0; i < GreekRange.Cards.Count; i++)
                 {
-                    leastPowerfulCard = estadoDeJuego.enemy.zonasdelplayer.RangedZone[i];
-                    minPower = estadoDeJuego.enemy.zonasdelplayer.RangedZone[i].Power;
+            
+                    if(GreekRange.Cards[i].Power < minPower)
+                    {
+                        leastPowerfulCard = GreekRange.Cards[i];
+                        minPower = GreekRange.Cards[i].Power;
+                    }
                 }
             }
+
+            void FindleastPowerfulCardInListSiege()
+            {
+                for (int i = 0; i < GreekSiege.Cards.Count; i++)
+                {
+                
+                    if(GreekSiege.Cards[i].Power < minPower)
+                    {
+                        leastPowerfulCard = GreekSiege.Cards[i];
+                        minPower = GreekSiege.Cards[i].Power;
+                    }
+                }    
+            }
+            if(leastPowerfulCard != null)
+            {
+                if(GreekMelee.Cards.Contains(leastPowerfulCard)) GreekMelee.Cards.Remove(leastPowerfulCard);
+                else if(GreekRange.Cards.Contains(leastPowerfulCard)) GreekRange.Cards.Remove(leastPowerfulCard);
+                else if(GreekSiege.Cards.Contains(leastPowerfulCard)) GreekSiege.Cards.Remove(leastPowerfulCard);
+            }
+            GreekGraveyard.Cards.Add(leastPowerfulCard);
+            UpdateLists();
+            return true;
         }
 
-        void FindleastPowerfulCardInListSiege()
+        if(estadoDeJuego.enemy == Player.Nordicos)
         {
-            for (int i = 0; i < estadoDeJuego.enemy.zonasdelplayer.SiegeZone.Count; i++)
+            if(NordicMelee.Cards.Count > 0) FindleastPowerfulCardInListMelee();
+            else if(NordicRange.Cards.Count >0) FindleastPowerfulCardInListRange();
+            else if(NordicSiege.Cards.Count > 0) FindleastPowerfulCardInListSiege();
+            else return false; 
+        
+            void FindleastPowerfulCardInListMelee()
             {
-            
-                if(estadoDeJuego.enemy.zonasdelplayer.SiegeZone[i].Power < minPower)
+                for (int i = 0; i < NordicMelee.Cards.Count; i++)
                 {
-                    leastPowerfulCard = estadoDeJuego.enemy.zonasdelplayer.SiegeZone[i];
-                    minPower = estadoDeJuego.enemy.zonasdelplayer.SiegeZone[i].Power;
+            
+                    if(NordicMelee.Cards[i].Power  < minPower)
+                    {
+                        leastPowerfulCard = NordicMelee.Cards[i];
+                        minPower = NordicMelee.Cards[i].Power;
+                    }
                 }
-            }    
+            }
+    
+            void FindleastPowerfulCardInListRange()
+            {
+                for (int i = 0; i < NordicRange.Cards.Count; i++)
+                {
+            
+                    if(NordicRange.Cards[i].Power < minPower)
+                    {
+                        leastPowerfulCard = NordicRange.Cards[i];
+                        minPower = NordicRange.Cards[i].Power;
+                    }
+                }
+            }
+
+            void FindleastPowerfulCardInListSiege()
+            {
+                for (int i = 0; i < NordicSiege.Cards.Count; i++)
+                {
+                
+                    if(NordicSiege.Cards[i].Power < minPower)
+                    {
+                        leastPowerfulCard = NordicSiege.Cards[i];
+                        minPower = NordicSiege.Cards[i].Power;
+                    }
+                }    
+            }
+            if(leastPowerfulCard != null)
+            {
+                if(NordicMelee.Cards.Contains(leastPowerfulCard)) NordicMelee.Cards.Remove(leastPowerfulCard);
+                else if(NordicRange.Cards.Contains(leastPowerfulCard)) NordicRange.Cards.Remove(leastPowerfulCard);
+                else if(NordicSiege.Cards.Contains(leastPowerfulCard)) NordicSiege.Cards.Remove(leastPowerfulCard);
+            }
+            NordicGraveyard.Cards.Add(leastPowerfulCard);
+            UpdateLists();
+            return true;
         }
-        if(leastPowerfulCard != null)
-        {
-            if(estadoDeJuego.enemy.zonasdelplayer.MeleeZone.Contains(leastPowerfulCard))
-            {
-                estadoDeJuego.enemy.zonasdelplayer.MeleeZone.Remove(leastPowerfulCard);
-            }
-            else if(estadoDeJuego.enemy.zonasdelplayer.RangedZone.Contains(leastPowerfulCard))
-            {
-                estadoDeJuego.enemy.zonasdelplayer.RangedZone.Remove(leastPowerfulCard);
-            }
-            else if(estadoDeJuego.enemy.zonasdelplayer.SiegeZone.Contains(leastPowerfulCard))
-            {
-                estadoDeJuego.enemy.zonasdelplayer.SiegeZone.Remove(leastPowerfulCard);
-            }
-        }
-        return true;
+
+        return false;
+        
     }
 
     public static bool ClearRow(EstadoDeJuego estadoDeJuego)
     {
-        List<List<BaseCard>> rows = new List<List<BaseCard>> {estadoDeJuego.enemy.zonasdelplayer.MeleeZone, estadoDeJuego.enemy.zonasdelplayer.RangedZone, estadoDeJuego.enemy.zonasdelplayer.SiegeZone};
+        List<List<UnityBaseCard>> rowsGreek = new List<List<UnityBaseCard>> {GreekMelee.Cards, GreekRange.Cards, GreekSiege.Cards};
+        List<List<UnityBaseCard>> rowsNordic = new List<List<UnityBaseCard>> {NordicMelee.Cards, NordicRange.Cards, NordicSiege.Cards};
 
-        List<BaseCard> smallesNonEmptyRow = null;
+
+        List<UnityBaseCard> smallesNonEmptyRow = null;
         int minCount = int.MaxValue;
 
-        for (int i = 0; i < rows.Count; i++)
+        if(estadoDeJuego.enemy == Player.Griegos)
         {
-            if(rows[i].Count > 0 && rows[i].Count < minCount)
+            for (int i = 0; i < rowsGreek.Count; i++)
             {
-                smallesNonEmptyRow = rows[i];
-                minCount = rows[i].Count;
+                if(rowsGreek[i].Count > 0 && rowsGreek[i].Count < minCount)
+                {
+                    smallesNonEmptyRow = rowsGreek[i];
+                    minCount = rowsGreek[i].Count;
+                }
             }
-        }
-        if(smallesNonEmptyRow != null)
-        { 
-            smallesNonEmptyRow.Clear();
+            if(smallesNonEmptyRow != null)
+            { 
+                GreekGraveyard.Cards.AddRange(smallesNonEmptyRow);
+                smallesNonEmptyRow.Clear();
+                UpdateLists();
+                
+            }
             return true;
         }
+
+        if(estadoDeJuego.enemy == Player.Nordicos)
+        {
+            for (int i = 0; i < rowsNordic.Count; i++)
+            {
+                if(rowsNordic[i].Count > 0 && rowsNordic[i].Count < minCount)
+                {
+                    smallesNonEmptyRow = rowsNordic[i];
+                    minCount = rowsNordic[i].Count;
+                }
+            }
+            if(smallesNonEmptyRow != null)
+            { 
+                NordicGraveyard.Cards.AddRange(smallesNonEmptyRow);
+                smallesNonEmptyRow.Clear();
+                UpdateLists();
+                
+            }
+            return true;
+        }
+        
         else return false;
     }
 
     public static bool AddIncrease(EstadoDeJuego estadoDeJuego)
     {
-        try
+        if(estadoDeJuego.player == Player.Griegos)
         {
-            if(estadoDeJuego.card.destinations[0] == Zonas.Melee) AddPowerMelee();
-            if(estadoDeJuego.card.destinations[0] == Zonas.Range) AddPowerRange();
-            if(estadoDeJuego.card.destinations[0] == Zonas.Siege) AddPowerSiege();
-            
-            void AddPowerMelee()
+            try
             {
-                if(estadoDeJuego.player.zonasdelplayer.MeleeZone.Count > 0)
+                if(estadoDeJuego.card.destinations[0] == Zonas.Melee) AddPowerMelee();
+                if(estadoDeJuego.card.destinations[0] == Zonas.Range) AddPowerRange();
+                if(estadoDeJuego.card.destinations[0] == Zonas.Siege) AddPowerSiege();
+                
+                void AddPowerMelee()
                 {
-                    for (int i = 0; i < estadoDeJuego.player.zonasdelplayer.MeleeZone.Count; i++)
+                    if(GreekMelee.Cards.Count > 0)
                     {
-                    estadoDeJuego.player.zonasdelplayer.MeleeZone[i].Power += 1;
-                    };
-                }
-            } 
-            
-            void AddPowerRange()
-            {
-                if(estadoDeJuego.player.zonasdelplayer.RangedZone.Count > 0)
+                        for (int i = 0; i < GreekMelee.Cards.Count; i++)
+                        {
+                            if(GreekMelee.Cards[i] is UnityUnitCard card && !card.increaseActivated)
+                            {
+                                GreekMelee.Cards[i].Power += 1;
+                                card.increaseActivated = true;
+                            }
+                            
+                        }
+                    }
+                } 
+                
+                void AddPowerRange()
                 {
-                    for (int i = 0; i < estadoDeJuego.player.zonasdelplayer.RangedZone.Count; i++)
+                    if(GreekRange.Cards.Count > 0)
                     {
-                    estadoDeJuego.player.zonasdelplayer.RangedZone[i].Power += 1;
+                        for (int i = 0; i < GreekRange.Cards.Count; i++)
+                        {
+                            if(GreekRange.Cards[i] is UnityUnitCard card && !card.increaseActivated)
+                            {
+                                GreekRange.Cards[i].Power += 1;
+                                card.increaseActivated = true;
+                            }
+                           
+                        }
+                    }
+                } 
+                
+                void AddPowerSiege()
+                {
+                    if(GreekSiege.Cards.Count > 0)
+                    {
+                        for (int i = 0; i < GreekSiege.Cards.Count; i++)
+                        {
+                            if(GreekSiege.Cards[i] is UnityUnitCard card && !card.increaseActivated)
+                            {
+                                GreekSiege.Cards[i].Power += 1;
+                                card.increaseActivated = true;
+                            }
+                           
+                        }
                     }
                 }
+                UpdateLists();
+                return true;
             } 
-            
-            void AddPowerSiege()
+            catch
             {
-                if(estadoDeJuego.player.zonasdelplayer.SiegeZone.Count > 0)
+                return false;
+            }
+        }
+
+        if(estadoDeJuego.player == Player.Nordicos)
+        {
+            try
+            {
+                if(estadoDeJuego.card.destinations[0] == Zonas.Melee) AddPowerMelee();
+                if(estadoDeJuego.card.destinations[0] == Zonas.Range) AddPowerRange();
+                if(estadoDeJuego.card.destinations[0] == Zonas.Siege) AddPowerSiege();
+                
+                void AddPowerMelee()
                 {
-                    for (int i = 0; i < estadoDeJuego.player.zonasdelplayer.SiegeZone.Count; i++)
+                    if(NordicMelee.Cards.Count > 0)
                     {
-                    estadoDeJuego.player.zonasdelplayer.SiegeZone[i].Power += 1;
+                        for (int i = 0; i < NordicMelee.Cards.Count; i++)
+                        {
+                            if(NordicMelee.Cards[i] is UnityUnitCard card && !card.increaseActivated)
+                            {
+                                NordicMelee.Cards[i].Power += 1;
+                                card.increaseActivated = true;
+                            }
+                        }
                     }
+                } 
+                
+                void AddPowerRange()
+                {
+                    if(NordicRange.Cards.Count > 0)
+                    {
+                        for (int i = 0; i < NordicRange.Cards.Count; i++)
+                        {
+                            if(NordicRange.Cards[i] is UnityUnitCard card && !card.increaseActivated)
+                            {
+                                NordicRange.Cards[i].Power += 1;
+                                card.increaseActivated = true;
+                            }
+                        }
+                    }
+                } 
+                
+                void AddPowerSiege()
+                {
+                    if(NordicSiege.Cards.Count > 0)
+                    {
+                        for (int i = 0; i < NordicSiege.Cards.Count; i++)
+                        {
+                            if(NordicSiege.Cards[i] is UnityUnitCard card && !card.increaseActivated)
+                            {
+                                NordicSiege.Cards[i].Power += 1;
+                                card.increaseActivated = true;
+                            }
+                        }
+                    }
+                }
+                UpdateLists();
+                return true;
+            } 
+            catch
+            {
+                return false;
+            }
+        }return false;
+    }
+
+    public static bool SetWeatherPoseidón(EstadoDeJuego estadoDeJuego)
+    {
+        try{
+            if(GreekSiege.Cards.Count > 0)
+            {
+                SubtractPowerGreek();
+            }
+            if(NordicSiege.Cards.Count > 0)
+            {
+                SubtractPowerNordic();
+            }
+            void SubtractPowerGreek()
+            {
+                for (int i = 0; i <GreekSiege.Cards.Count; i++)
+                {
+                GreekSiege.Cards[i].Power -= 2;
+                }
+
+            }
+            void SubtractPowerNordic()
+            {
+                for (int i = 0; i < NordicSiege.Cards.Count; i++)
+                {
+                    NordicSiege.Cards[i].Power -= 2;
                 }
             }
+            UpdateLists();
             return true;
-        } 
+        }
         catch
         {
             return false;
         }
+        
     }
 
-     static Dictionary<string, EffectDelegate> effects = new Dictionary<string, EffectDelegate>
+    public static bool SetWeatherThor(EstadoDeJuego estadoDeJuego)
+    {
+        try{
+            if(GreekRange.Cards.Count > 0)
+            {
+                SubtractPowerGreek();
+            }
+            if(NordicRange.Cards.Count > 0)
+            {
+                SubtractPowerNordic();
+            }
+            void SubtractPowerGreek()
+            {
+                for (int i = 0; i <GreekRange.Cards.Count; i++)
+                {
+                GreekRange.Cards[i].Power -= 2;
+                }
+
+            }
+            void SubtractPowerNordic()
+            {
+                for (int i = 0; i < NordicRange.Cards.Count; i++)
+                {
+                    NordicRange.Cards[i].Power -= 2;
+                }
+            }
+            UpdateLists();
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
+        
+    }
+
+    public static bool SetClimate(EstadoDeJuego estadoDeJuego)
+    {
+        if(estadoDeJuego.card.destinations[0] == Zonas.Melee)
+        {
+            SubtractPowerMelee();
+            return true;
+        }
+        else if(estadoDeJuego.card.destinations[0] == Zonas.Range)
+        {
+            SubtractPowerRange();
+            return true;
+        }
+        else if(estadoDeJuego.card.destinations[0] == Zonas.Siege)
+        {
+            SubtractPowerSiege();
+            return true;
+        }
+        void SubtractPowerMelee()
+        {
+            if(GreekMelee.Cards.Count > 0)
+            {
+                foreach (var item in GreekMelee.Cards)
+                {
+                    if((item is UnityUnitCard card) && card.worth == Worth.Silver && !card.climateActivated)
+                    {
+                        item.Power -= 2; 
+                        item.climateActivated = true;
+                    }
+                }
+            }
+            
+            if(NordicMelee.Cards.Count > 0)
+            {
+                foreach (var item in NordicMelee.Cards)
+                {
+                    if((item is UnityUnitCard card) && card.worth == Worth.Silver && !card.climateActivated)
+                    {
+                        item.Power -= 2;
+                        item.climateActivated = true;
+                    }
+                }
+
+            }
+            UpdateLists();
+        }
+         void SubtractPowerRange()
+        {
+            if(GreekRange.Cards.Count > 0)
+            {
+                foreach (var item in GreekRange.Cards)
+                {
+                    if((item is UnityUnitCard card) && card.worth == Worth.Silver && !card.climateActivated)
+                    {
+                        item.Power -= 2;
+                        item.climateActivated = true;
+                    }
+                }
+            }
+            
+            if(NordicRange.Cards.Count > 0)
+            {
+                foreach (var item in NordicRange.Cards)
+                {
+                    if((item is UnityUnitCard card) && card.worth == Worth.Silver && !card.climateActivated)
+                    {
+                        item.Power -= 2;
+                        item.climateActivated = true;
+                    }
+                }
+
+            }
+            UpdateLists();
+        }
+
+        void SubtractPowerSiege()
+        {
+            if(GreekSiege.Cards.Count > 0)
+            {
+                foreach (var item in GreekSiege.Cards)
+                {
+                    if((item is UnityUnitCard card) && card.worth == Worth.Silver && !card.climateActivated)
+                    {
+                        item.Power -= 2;
+                        item.climateActivated = true;
+                    }
+                }
+
+            }
+            
+            if(NordicSiege.Cards.Count > 0)
+            {
+                foreach (var item in NordicSiege.Cards)
+                {
+                    if((item is UnityUnitCard card) && card.worth == Worth.Silver && !card.climateActivated)
+                    {
+                        item.Power -= 2;
+                        item.climateActivated = true;
+                    }
+                }
+
+            }
+            UpdateLists();
+        }
+        return false;
+       
+    }
+
+    public static bool Clearance(EstadoDeJuego estadoDeJuego)
+    {
+        if(estadoDeJuego.card.destinations[0] == Zonas.Melee)
+        {
+            AddPowerMelee();
+            return true;
+        }
+        else if(estadoDeJuego.card.destinations[0] == Zonas.Range)
+        {
+            AddPowerRange();
+            return true;
+        }
+        else if(estadoDeJuego.card.destinations[0] == Zonas.Siege)
+        {
+            AddPowerSiege();
+            return true;
+        }
+
+        void AddPowerMelee()
+        {
+            if(GreekMelee.Cards.Count > 0)
+            {
+                for (int i = 0; i < GreekMelee.Cards.Count; i++)
+                {
+                    if((GreekMelee.Cards[i] is UnityUnitCard card) && card.worth == Worth.Silver && card.climateActivated)
+                    {
+                        GreekMelee.Cards[i].Power += 2;
+                        GreekMelee.Cards[i].climateActivated = false;
+                    }
+                }
+            }
+            
+            if(NordicMelee.Cards.Count > 0)
+            {
+                for (int i = 0; i < NordicMelee.Cards.Count; i++)
+                {
+                    if((NordicMelee.Cards[i] is UnityUnitCard card) && card.worth == Worth.Silver && card.climateActivated)
+                    {
+                        NordicMelee.Cards[i].Power += 2;
+                        NordicMelee.Cards[i].climateActivated = false;
+                    }
+                }
+
+            }
+
+            int index = 0;
+            while (index < Climate.Cards.Count)
+            {
+                if(Climate.Cards[index] != null && Climate.Cards[index] is UnityClimateCard card && card.destinations[0]==Zonas.Melee)
+                {
+                    if(Climate.Cards[index].Faction == Faction.Greek_Gods) GreekGraveyard.Cards.Add(Climate.Cards[index]);
+                    else NordicGraveyard.Cards.Add(Climate.Cards[index]);
+                    Climate.Cards.Remove(Climate.Cards[index]);
+                    index ++;
+                }
+            }
+            
+            UpdateLists();
+        }
+
+        void AddPowerRange()
+        {
+            if(GreekRange.Cards.Count > 0)
+            {
+                for (int i = 0; i < GreekRange.Cards.Count; i++)
+                {
+                    if((GreekRange.Cards[i] is UnityUnitCard card) && card.worth == Worth.Silver && card.climateActivated)
+                    {
+                        GreekRange.Cards[i].Power += 2;
+                        GreekRange.Cards[i].climateActivated = false;
+                    }
+                }
+
+            }
+            
+            if(NordicRange.Cards.Count > 0)
+            {
+                for (int i = 0; i < NordicRange.Cards.Count; i++)
+                {
+                    if((NordicRange.Cards[i] is UnityUnitCard card) && card.worth == Worth.Silver && card.climateActivated)
+                    {
+                        NordicRange.Cards[i].Power += 2;
+                        NordicRange.Cards[i].climateActivated = false;
+                    }
+                }
+
+            }
+
+             int index = 0;
+            while (index < Climate.Cards.Count)
+            {
+                if(Climate.Cards[index] != null && Climate.Cards[index] is UnityClimateCard card && card.destinations[0]==Zonas.Melee)
+                {
+                    if(Climate.Cards[index].Faction == Faction.Greek_Gods) GreekGraveyard.Cards.Add(Climate.Cards[index]);
+                    else NordicGraveyard.Cards.Add(Climate.Cards[index]);
+                    Climate.Cards.Remove(Climate.Cards[index]);
+                    index ++;
+                }
+            }
+        
+            UpdateLists();
+        }
+
+        void AddPowerSiege()
+        {
+            if(GreekSiege.Cards.Count > 0)
+            {
+                for (int i = 0; i < GreekSiege.Cards.Count; i++)
+                {
+                    if((GreekSiege.Cards[i] is UnityUnitCard card) && card.worth == Worth.Silver && card.climateActivated)
+                    {
+                        GreekSiege.Cards[i].Power += 2;
+                        GreekSiege.Cards[i].climateActivated = false;
+                    }
+                }
+
+            }
+            
+            if(NordicSiege.Cards.Count > 0)
+            {
+                for (int i = 0; i < NordicSiege.Cards.Count; i++)
+                {
+                    if((NordicSiege.Cards[i] is UnityUnitCard card) && card.worth == Worth.Silver && card.climateActivated)
+                    {
+                        NordicSiege.Cards[i].Power += 2;
+                        NordicSiege.Cards[i].climateActivated = false;
+                    }
+                }
+
+            }
+
+            int index = 0;
+            while (index < Climate.Cards.Count)
+            {
+                if(Climate.Cards[index] != null && Climate.Cards[index] is UnityClimateCard card && card.destinations[0]==Zonas.Melee)
+                {
+                    if(Climate.Cards[index].Faction == Faction.Greek_Gods) GreekGraveyard.Cards.Add(Climate.Cards[index]);
+                    else NordicGraveyard.Cards.Add(Climate.Cards[index]);
+                    Climate.Cards.Remove(Climate.Cards[index]);
+                    index ++;
+                }
+            }
+        
+            UpdateLists();
+        }
+        return false; 
+    }
+
+    public static bool Increase(EstadoDeJuego estadoDeJuego)
+    {
+        if(estadoDeJuego.card.destinations[0] == Zonas.Melee)
+        {
+            AddPowerMelee();
+            return true;
+        }
+        else if(estadoDeJuego.card.destinations[0] == Zonas.Range)
+        {
+            AddPowerRange();
+            return true;
+        }
+        else if(estadoDeJuego.card.destinations[0] == Zonas.Siege)
+        {
+            AddPowerSiege();
+            return true;
+        }
+
+        void AddPowerMelee()
+        {
+            if(GreekMelee.Cards.Count > 0)
+            {
+                for (int i = 0; i < GreekMelee.Cards.Count; i++)
+                {
+                    if((GreekMelee.Cards[i] is UnityUnitCard card) && card.worth == Worth.Silver && !card.increaseActivated)
+                    {
+                        GreekMelee.Cards[i].Power += 1;
+                        card.increaseActivated = true;
+                    }
+                }
+            }
+            
+            if(NordicMelee.Cards.Count > 0)
+            {
+                for (int i = 0; i < NordicMelee.Cards.Count; i++)
+                {
+                    if((NordicMelee.Cards[i] is UnityUnitCard card) && card.worth == Worth.Silver && !card.increaseActivated)
+                    {
+                        NordicMelee.Cards[i].Power += 1;
+                        card.increaseActivated = true;
+                    }
+                }
+
+            }
+            
+            UpdateLists();
+        }
+
+        void AddPowerRange()
+        {
+            if(GreekRange.Cards.Count > 0)
+            {
+                for (int i = 0; i < GreekRange.Cards.Count; i++)
+                {
+                    if((GreekRange.Cards[i] is UnityUnitCard card) && card.worth == Worth.Silver && !card.increaseActivated)
+                    {
+                        GreekRange.Cards[i].Power += 1;
+                        card.increaseActivated = true;
+                    }
+                }
+
+            }
+            
+            if(NordicRange.Cards.Count > 0)
+            {
+                for (int i = 0; i < NordicRange.Cards.Count; i++)
+                {
+                    if((NordicRange.Cards[i] is UnityUnitCard card) && card.worth == Worth.Silver && !card.increaseActivated)
+                    {
+                        NordicRange.Cards[i].Power += 1;
+                        card.increaseActivated = true;
+                    }
+                }
+
+            }
+        
+            UpdateLists();
+        }
+
+        void AddPowerSiege()
+        {
+            if(GreekSiege.Cards.Count > 0)
+            {
+                for (int i = 0; i < GreekSiege.Cards.Count; i++)
+                {
+                    if((GreekSiege.Cards[i] is UnityUnitCard card) && card.worth == Worth.Silver && !card.increaseActivated)
+                    {
+                        GreekSiege.Cards[i].Power += 1;
+                        card.increaseActivated = true;
+                    }
+                }
+
+            }
+            
+            if(NordicSiege.Cards.Count > 0)
+            {
+                for (int i = 0; i < NordicSiege.Cards.Count; i++)
+                {
+                    if((NordicSiege.Cards[i] is UnityUnitCard card) && card.worth == Worth.Silver && !card.increaseActivated)
+                    {
+                        NordicSiege.Cards[i].Power += 1;
+                        card.increaseActivated = true;
+
+                    }
+                }
+
+            }
+
+        
+            UpdateLists();
+        }
+        return false; 
+    }
+
+    public static bool LeaderZeus(EstadoDeJuego estadoDeJuego)
+    {
+        if(!estadoDeJuego.card.leader)
+        {
+            if(GreekMelee.Cards.Count > 0)
+            {
+                AddPower();
+            }
+
+            void AddPower()
+            {
+                for (int i = 0; i < GreekMelee.Cards.Count; i++)
+                {
+                    if(GreekMelee.Cards[i] is UnityUnitCard card && card.worth == Worth.Silver && !card.increaseActivated) 
+                    {
+                        GreekMelee.Cards[i].Power += 2;
+                        card.increaseActivated = true;
+                    }
+                }
+            } 
+            estadoDeJuego.card.leader = true;
+            UpdateLists();
+            return true;
+        }
+        return false;
+    }
+
+    public static bool LeaderOdin(EstadoDeJuego estadoDeJuego)
+    {
+        bool odin = EliminateMostPowerfullCard(estadoDeJuego);
+        estadoDeJuego.card.leader = false;
+        return odin;
+    }
+
+    static Dictionary<string, EffectDelegate> effects = new Dictionary<string, EffectDelegate>
     {
         {"Empty", EmptyEffect },
         {"Afrodita", DrawCard },
@@ -367,7 +1178,7 @@ public static class SavedEffects
         {"Freya", CalculateAverage },
 
         {"Hefesto" , MultiplyPower },
-        {"SKadi" , MultiplyPower },
+        {"Skadi" , MultiplyPower },
 
         {"Ares", RemoveLeastPowerfulCard },
         {"Tyr", RemoveLeastPowerfulCard },
@@ -376,9 +1187,25 @@ public static class SavedEffects
         {"Valquiria", ClearRow },
 
         {"Hera", AddIncrease },
-        {"Poseidón", AddIncrease },
         {"Balder", AddIncrease },
-        {"Thor", AddIncrease }
+        
+        {"Poseidón", SetWeatherPoseidón },
+        {"Thor", SetWeatherThor },
+
+        {"Climate Melee", SetClimate },
+        {"Climate Range", SetClimate },
+        {"Climate Siege", SetClimate },
+
+        {"Clearance Melee", Clearance },
+        {"Clearance Range", Clearance },
+        {"Clearance Siege", Clearance },
+
+        {"Increase Melee", Increase },
+        {"Increase Range", Increase },
+        {"Increase Siege", Increase },
+
+        {"Odin", LeaderOdin },
+        {"Zeus", LeaderZeus },
     };
 }
 

@@ -7,27 +7,7 @@ using UnityEditor;
 public class ScriptZone : MonoBehaviour
 {
     public List<UnityBaseCard> Cards;
-    /*public List<BaseCard> NordicMelee;
-    public List<BaseCard> GreekSiege;
-    public List<BaseCard> NordicSiege;
-    public List<BaseCard> GreekRange;
-    public List<BaseCard> NordicRange;
-    public List<BaseCard> Climate;
-    public List<BaseCard> GreekIncreaseMelee;
-    public List<BaseCard> NordicIncreaseMelee;
-    public List<BaseCard> GreekIncreaseSiege;
-    public List<BaseCard> NordicIncreaseSiege;
-    public List<BaseCard> GreekIncreaseRange;
-    public List<BaseCard> NordicIncreaseRange;
-
-
-    public static bool climateMelee;
-    public static bool climateMeleeEnemy;
-    public static bool climateSiege;
-    public static bool climateSiegeEnemy;
-    public static bool climateRange;
-    public static bool climateRangeEnemy;*/
-
+    
     public void UpdateList()
     {
         GridLayoutGroup gridLayoutGroup = GetComponent<GridLayoutGroup>();
@@ -59,6 +39,8 @@ public class ScriptZone : MonoBehaviour
     {
         GameObject cardPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/CardPrefab.prefab");
         GameObject cardCopy = GameObject.Instantiate(cardPrefab);
+        CardControler cardControler = cardCopy.GetComponent<CardControler>();
+        cardControler.card = card; 
         cardCopy.GetComponent<Display>().card = (UnityBaseCard)card;
         string name = cardCopy.GetComponent<Display>().card.Name;
         cardCopy.transform.SetParent(gridLayoutGroup.transform, false);
@@ -73,7 +55,7 @@ public class ScriptZone : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+       
     }
 
    /* public void ClearZones()

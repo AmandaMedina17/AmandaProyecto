@@ -10,7 +10,7 @@ public class ZoomCard : MonoBehaviour
 
     public void Awake()
     {
-        canvas = GameObject.Find("MainCanvas");
+        canvas = GameObject.Find("Zoom");
     }
 
     public void OnCardAreaEnter()

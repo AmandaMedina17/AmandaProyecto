@@ -10,23 +10,15 @@ public class CodeExecutor : MonoBehaviour
     public Button executeButton;
     public Button ClearButton;
     private Inicio inicio;
-
-    /*private List<BaseCard> Cards;
-    private List<string> AddedCards;
-    private List<string> Pre_madeCards;
-    private List<string> Pre_madeEffects;
-    private bool PreviouslyCompiled;*/
     
     public void Awake()
     {
-        /*Cards = new List<BaseCard>();
-        AddedCards = new List<string>();
-        Pre_madeCards = new List<string>();
-        Pre_madeEffects = new List<string>();*/
+        
     }
 
     void Start()
     {
+        inicio = new Inicio();
         executeButton.onClick.AddListener(ExecuteCode);
         ClearButton.onClick.AddListener(ClearAllText);
 
@@ -36,7 +28,9 @@ public class CodeExecutor : MonoBehaviour
     void ExecuteCode()
     {
         string code = codeInput.text;
+        Debug.Log(code);
         inicio.Evaluate(code);
+        
     }
 
     void ClearAllText()

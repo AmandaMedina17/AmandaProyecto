@@ -8,17 +8,17 @@ public class BaitCard : BaseCard
     {
     }
 
-      public override bool Effect(EstadoDeJuego estadoDeJuego)
-    {
-        try
-        {
-            return Effect(estadoDeJuego.lista, estadoDeJuego.lista.IndexOf(estadoDeJuego.card)) & EffectDelegate.Invoke(estadoDeJuego);
-        }
-        catch (System.NullReferenceException)
-        {
-            return false;
-        }
-    }
+    // public override bool Effect(EstadoDeJuego estadoDeJuego)
+    // {
+    //     try
+    //     {
+    //         return Effect(estadoDeJuego.lista, estadoDeJuego.lista.IndexOf(estadoDeJuego.card)) & EffectDelegate.Invoke(estadoDeJuego);
+    //     }
+    //     catch (System.NullReferenceException)
+    //     {
+    //         return false;
+    //     }
+    // }
 
     public bool Effect(List<BaseCard> list, int index)
     {

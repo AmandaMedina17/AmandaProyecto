@@ -14,6 +14,11 @@ public class UnityBaseCard : ScriptableObject
     public string cardDescription;
     public int Power;
 
+    public bool climateActivated = false;
+    public bool increaseActivated = false;
+    public bool leader = false;
+    
+
 
     public UnityBaseCard(string name, int power, Faction faction, TipoDeCarta tipoDeCarta, List<Zonas> Destinations, Sprite SpriteImage, string CardDescription, EffectDelegate Effect = null)
     {
